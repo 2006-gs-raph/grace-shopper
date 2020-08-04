@@ -3,17 +3,6 @@ const Sequelize = require('sequelize')
 const db = require('../db')
 
 const User = db.define('user', {
-  //my code
-
-  //   Fields:
-  // id
-  // firstName
-  // lastName
-  // email - was already here
-  // phone
-  // address
-  // isAdmin
-
   firstName: {
     type: Sequelize.STRING,
     allowNull: false,
@@ -48,7 +37,6 @@ const User = db.define('user', {
     defaultValue: false
   },
 
-  //my code
   email: {
     type: Sequelize.STRING,
     unique: true,
