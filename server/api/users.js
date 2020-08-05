@@ -2,6 +2,17 @@ const router = require('express').Router()
 const {User} = require('../db/models')
 module.exports = router
 
+const isAdmin = (req, res, next) => {
+  if (!req.user.isAdmin) {
+    const error = new Error('You do not have access')
+    error.status = 401
+
+    return next(error)
+  }
+
+  next()
+}
+
 router.get('/', async (req, res, next) => {
   try {
     const users = await User.findAll({
@@ -13,5 +24,43 @@ router.get('/', async (req, res, next) => {
     res.json(users)
   } catch (err) {
     next(err)
+  }
+})
+
+router.get('/:id', async (req, res, next) => {
+  try {
+    const user = await User.findByPk(req.params.id)
+    res.send(user)
+  } catch (error) {
+    next(error)
+  }
+})
+
+router.post('/', async (req, res, next) => {
+  try {
+    const newUser = await User.create(req.body)
+    res.send(newUser)
+  } catch (error) {
+    next(error)
+  }
+})
+
+router.put(':/id', async (req, res, next) => {
+  try {
+    const userToUpdate = await User.findByPk(req.params.id)
+    res.send(await userToUpdate.update(req.body))
+  } catch (error) {
+    next(error)
+  }
+})
+
+router.delete('/:id', isAdmin, async (req, res, next) => {
+  try {
+    const id = req.params.id
+    await User.destroy({where: {id}})
+    const users = await User.findAll()
+    res.status(204).json(users)
+  } catch (error) {
+    next(error)
   }
 })
