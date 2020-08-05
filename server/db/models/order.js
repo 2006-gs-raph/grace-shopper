@@ -3,20 +3,20 @@ const db = require('../db')
 
 const Order = db.define('order', {
   orderNumber: {
-    type: Sequelize.NUMBER,
+    type: Sequelize.INTEGER,
     allowNull: false
   },
   //The products array below will contain objects with productId
   //name, quantity, price
-  products: {
-    type: DataTypes.STRING,
+  productList: {
+    type: Sequelize.STRING,
     get: function() {
       //Here we are parsing the string to get back an array of objects
-      return JSON.parse(this.getDataValue('products'))
+      return JSON.parse(this.getDataValue('productList'))
     },
     set: function(orderArray) {
       //Here we are stringifying our array so that it can be stored in the db
-      return this.setDataValue('products', JSON.stringify(orderArray))
+      return this.setDataValue('productList', JSON.stringify(orderArray))
     },
     validate: {
       notEmpty: true
