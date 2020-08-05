@@ -2,14 +2,23 @@ const router = require('express').Router()
 const {User} = require('../db/models')
 module.exports = router
 
+//verifying that the person has admin rights
 const isAdmin = (req, res, next) => {
   if (!req.user.isAdmin) {
-    const error = new Error('You do not have access')
+    const error = new Error('You are not authorized to perform this action')
     error.status = 401
-
     return next(error)
   }
+  next()
+}
 
+//verifying that the person who wants to perform an action can only do so to their record
+const isSelf = (req, res, next) => {
+  if (req.params.id === req.user.id) {
+    const error = new Error('You are not authorized to perform this action')
+    error.status = 401
+    return next(error)
+  }
   next()
 }
 
@@ -36,7 +45,7 @@ router.get('/:id', async (req, res, next) => {
   }
 })
 
-router.post('/', async (req, res, next) => {
+router.post('/', isAdmin, isSelf, async (req, res, next) => {
   try {
     const newUser = await User.create(req.body)
     res.send(newUser)
@@ -45,7 +54,8 @@ router.post('/', async (req, res, next) => {
   }
 })
 
-router.put(':/id', async (req, res, next) => {
+router.put('/:id', isAdmin, isSelf, async (req, res, next) => {
+  //add a check for a user and admin
   try {
     const userToUpdate = await User.findByPk(req.params.id)
     res.send(await userToUpdate.update(req.body))
