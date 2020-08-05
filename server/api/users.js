@@ -13,8 +13,8 @@ const isAdmin = (req, res, next) => {
 }
 
 //verifying that the person who wants to perform an action can only do so to their record
-const isSelf = (req, res, next) => {
-  if (req.params.id === req.user.id) {
+const isSelfOrAdmin = (req, res, next) => {
+  if (req.params.id !== req.user.id || !req.user.isAdmin) {
     const error = new Error('You are not authorized to perform this action')
     error.status = 401
     return next(error)
@@ -45,7 +45,7 @@ router.get('/:id', async (req, res, next) => {
   }
 })
 
-router.post('/', isAdmin, isSelf, async (req, res, next) => {
+router.post('/', isSelfOrAdmin, async (req, res, next) => {
   try {
     const newUser = await User.create(req.body)
     res.send(newUser)
@@ -54,7 +54,7 @@ router.post('/', isAdmin, isSelf, async (req, res, next) => {
   }
 })
 
-router.put('/:id', isAdmin, isSelf, async (req, res, next) => {
+router.put('/:id', isSelfOrAdmin, async (req, res, next) => {
   //add a check for a user and admin
   try {
     const userToUpdate = await User.findByPk(req.params.id)
