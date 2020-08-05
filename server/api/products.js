@@ -2,6 +2,15 @@ const router = require('express').Router()
 const {Product} = require('../db/models')
 module.exports = router
 
+const isAdmin = (req, res, next) => {
+  if (!req.user.isAdmin) {
+    const error = new Error('You do not have access')
+    error.status = 401
+    return next(error)
+  }
+  next()
+}
+
 //Read all route
 router.get('/', async (req, res, next) => {
   try {
@@ -28,7 +37,7 @@ router.get('/:productId', async (req, res, next) => {
 })
 
 //Create route
-router.post('/', async (req, res, next) => {
+router.post('/', isAdmin, async (req, res, next) => {
   try {
     const newProduct = await Product.create(req.body)
     if (newProduct) {
@@ -42,7 +51,7 @@ router.post('/', async (req, res, next) => {
 })
 
 //Update route
-router.put('/:productId', async (req, res, next) => {
+router.put('/:productId', isAdmin, async (req, res, next) => {
   try {
     const id = req.params.id
     const [numUpdated, updatedProduct] = await Product.update(req.body, {
@@ -61,7 +70,7 @@ router.put('/:productId', async (req, res, next) => {
 })
 
 //Delete route
-router.delete('/:productId', async (req, res, next) => {
+router.delete('/:productId', isAdmin, async (req, res, next) => {
   try {
     const id = req.params.id
     const productDeleted = await Product.destroy({where: {id}})
