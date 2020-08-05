@@ -70,7 +70,7 @@ async function seed() {
       subTotal: 0.0,
       status: '',
       orderDate: 0,
-      userId: 10000
+      userId: 1
     }),
     Order.create({
       orderNumber: 3,
