@@ -59,17 +59,26 @@ async function seed() {
     Order.create({
       orderNumber: 1,
       productList: '',
-      subTotal: 0.0
+      subTotal: 0.0,
+      status: '',
+      orderDate: 0,
+      userId: 1
     }),
     Order.create({
       orderNumber: 2,
       productList: '',
-      subTotal: 0.0
+      subTotal: 0.0,
+      status: '',
+      orderDate: 0,
+      userId: 10000
     }),
     Order.create({
       orderNumber: 3,
       productList: '',
-      subTotal: 0.0
+      subTotal: 0.0,
+      status: '',
+      orderDate: 0,
+      userId: 2
     })
   ])
 
