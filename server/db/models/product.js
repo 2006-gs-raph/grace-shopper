@@ -31,11 +31,11 @@ const Product = db.define('product', {
     }
   },
   price: {
-    type: Sequelize.DECIMAL(10, 2),
-    defaultValue: 10.0,
+    type: Sequelize.INTEGER,
+    defaultValue: 100,
     validate: {
-      min: 10.0,
-      max: 10000.0
+      min: 100,
+      max: 100000000
     }
   }
 })
