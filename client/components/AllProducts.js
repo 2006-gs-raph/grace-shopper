@@ -1,13 +1,24 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import axios from 'axios'
 import {Link} from 'react-router-dom'
+import {fetchProducts} from '../store/product'
+import {connect} from 'react-redux'
 
 const fakeAddToCartFunc = () => {
   return 'welp'
 }
 
 function AllProducts(props) {
-  const products = props.products
+  const {products, getProducts} = props
+
+  /*     //useState Hook below (substitute for local state)
+  const [name, setName] = useState('');
+  const [lasName, setLastName] = useState(''); */
+
+  //useEffect Hook
+  useEffect(() => {
+    getProducts()
+  }, [])
 
   return (
     <div>
@@ -37,4 +48,16 @@ function AllProducts(props) {
   )
 }
 
-export default AllProducts
+const mapState = state => {
+  return {
+    products: state.product.list
+  }
+}
+
+const mapDispatch = dispatch => {
+  return {
+    getProducts: () => dispatch(fetchProducts())
+  }
+}
+
+export default connect(mapState, mapDispatch)(AllProducts)
