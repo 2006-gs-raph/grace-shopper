@@ -6,22 +6,6 @@ const Order = db.define('order', {
     type: Sequelize.INTEGER,
     allowNull: false
   },
-  //The products array below will contain objects with productId
-  //name, quantity, price
-  productList: {
-    type: Sequelize.STRING,
-    get: function() {
-      //Here we are parsing the string to get back an array of objects
-      return JSON.parse(this.getDataValue('productList'))
-    },
-    set: function(orderArray) {
-      //Here we are stringifying our array so that it can be stored in the db
-      return this.setDataValue('productList', JSON.stringify(orderArray))
-    },
-    validate: {
-      notEmpty: true
-    }
-  },
   subTotal: {
     type: Sequelize.DECIMAL(10, 2),
     get: function() {
