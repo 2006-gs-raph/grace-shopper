@@ -9,8 +9,6 @@ const fakeAddToCartFunc = () => {
 }
 
 function AllProducts(props) {
-  const {products, getProducts} = props
-
   /*     //useState Hook below (substitute for local state)
   const [name, setName] = useState('');
   const [lasName, setLastName] = useState(''); */
@@ -19,6 +17,8 @@ function AllProducts(props) {
   useEffect(() => {
     getProducts()
   }, [])
+
+  const {products, getProducts} = props
 
   return (
     <div>
