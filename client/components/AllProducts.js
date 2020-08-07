@@ -8,7 +8,7 @@ const fakeAddToCartFunc = () => {
   return 'welp'
 }
 
-function AllProducts(props) {
+export const AllProducts = props => {
   /*     //useState Hook below (substitute for local state)
   const [name, setName] = useState('');
   const [lasName, setLastName] = useState(''); */
@@ -27,13 +27,12 @@ function AllProducts(props) {
         {products.map(product => (
           <div key={product.id}>
             <br />
-            <Link to={`/products/{product.id}`}>
+            <Link to={`/products/${product.id}`}>
               <img src={product.imageUrl} />
               <br />
               {product.name}
             </Link>
-            <br />
-            &dollar;{product.price / 100}
+            <br />${product.price / 100}
             {/* not sure if the above is right; also we need to update the prices elsewhere to be x100 */}
             <br />
             {/* code for displaying whether the product is in stock */}
