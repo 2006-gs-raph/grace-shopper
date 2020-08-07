@@ -11,19 +11,20 @@ async function seed() {
 
   const users = await Promise.all([
     User.create({
+      isAdmin: true,
+      email: 'admin@email.com',
+      password: '123'
+    }),
+    User.create({
       firstName: 'Cody',
-      lastName: 'Murphy',
-      phone: '219-555-6897',
-      address: '555 Whatever Lane, Whatever, NE 55555',
+      lastName: 'Pug',
       email: 'cody@email.com',
       password: '123'
     }),
     User.create({
-      firstName: 'CodyAnn',
-      lastName: 'Smith',
-      phone: '219-555-6898',
-      address: '554 Whatever Lane, Whatever, NE 55555',
-      email: 'codyann@email.com',
+      firstName: 'Rigatoni',
+      lastName: 'Cat',
+      email: 'rigatoni@email.com',
       password: '123'
     })
   ])
@@ -32,53 +33,32 @@ async function seed() {
     Product.create({
       name: 'Cat',
       description:
-        'Our eco-friendliest object of destruction, a Cat will be more than adequate for your vase-smashing needs',
-      imageUrl: '',
-      quantity: 10,
-      price: 20095
+        'Our eco-friendliest object of destruction, a Cat will be more than adequate for your vase-smashing needs'
     }),
     Product.create({
       name: 'Catapult',
       description:
-        'Defend your abode medieval-style with this limited-edition weapon of vase destruction',
-      imageUrl: '',
-      quantity: 10,
-      price: 14995
+        'Defend your abode medieval-style with this limited-edition weapon of vase destruction'
     }),
     Product.create({
       name: 'Slingshot',
       description:
-        'Craving simplicity in your vase destruction routine? You will love our vase-optimized slingshot. Whether you shoot at that dastardly vase with a pebble or load up the infernal pottery itself, you are guaranteed to be in a shard pile in no time',
-      imageUrl: '',
-      quantity: 10,
-      price: 2495
+        'Craving simplicity in your vase destruction routine? You will love our vase-optimized slingshot. Whether you shoot at that dastardly vase with a pebble or load up the infernal pottery itself, you are guaranteed to be in a shard pile in no time'
     })
   ])
 
   const orders = await Promise.all([
     Order.create({
-      orderNumber: 1,
-      productList: '',
-      subTotal: 0.0,
-      status: '',
-      orderDate: 0,
+      status: 'cart',
       userId: 1
     }),
     Order.create({
-      orderNumber: 2,
-      productList: '',
-      subTotal: 0.0,
-      status: '',
-      orderDate: 0,
-      userId: 1
-    }),
-    Order.create({
-      orderNumber: 3,
-      productList: '',
-      subTotal: 0.0,
-      status: '',
-      orderDate: 0,
+      status: 'cart',
       userId: 2
+    }),
+    Order.create({
+      status: 'cart',
+      userId: 3
     })
   ])
 
