@@ -1,11 +1,19 @@
 const router = require('express').Router()
+const {Order, User, Product} = require('../db/models')
 
-const {Order} = require('../db/models')
-//const {User} = require('../db/models')
-
+//verifying that the person has admin rights
 const isAdmin = (req, res, next) => {
   if (!req.user.isAdmin) {
-    const error = new Error('You do not have access')
+    const error = new Error('You are not authorized to perform this action')
+    error.status = 401
+    return next(error)
+  }
+  next()
+}
+
+const isSelfOrAdmin = (req, res, next) => {
+  if (req.params.id !== req.user.id || !req.user.isAdmin) {
+    const error = new Error('You are not authorized to perform this action')
     error.status = 401
     return next(error)
   }
@@ -16,13 +24,8 @@ const isAdmin = (req, res, next) => {
 router.get('/', isAdmin, async (req, res, next) => {
   try {
     const orders = await Order.findAll({
-      attributes: [
-        'orderNumber',
-        'productList',
-        'subTotal',
-        'status',
-        'orderDate'
-      ]
+      attributes: ['status'],
+      include: [{model: User}, {model: Product}]
     })
     res.json(orders)
   } catch (error) {
@@ -30,11 +33,25 @@ router.get('/', isAdmin, async (req, res, next) => {
   }
 })
 
+router.get('/cart', async (req, res, next) => {
+  try {
+    const cart = await Order.findOne({
+      where: {
+        userId: req.user.id,
+        status: 'cart'
+      }
+    })
+    res.json(cart)
+  } catch (err) {
+    next(err)
+  }
+})
+
 //get one order by orderNumber
 //need a way to restrict this to admins and users?
-router.get('/:orderNumber', async (req, res, next) => {
+router.get('/:orderId', async (req, res, next) => {
   try {
-    const order = await Order.findByPk(req.params.orderNumber)
+    const order = await Order.findByPk(req.params.orderId)
     res.json(order)
   } catch (error) {
     next(error)
@@ -50,10 +67,10 @@ router.post('/', (req, res, next) => {
 })
 
 //delete an order
-router.delete('/:orderNumber', isAdmin, (req, res, next) => {
+router.delete('/:orderId', isAdmin, (req, res, next) => {
   Order.destroy({
     where: {
-      orderNumber: req.params.orderNumber
+      id: req.params.orderId
     }
   })
     .then(() => res.status(204).end())
@@ -61,8 +78,8 @@ router.delete('/:orderNumber', isAdmin, (req, res, next) => {
 })
 
 //update an order
-router.put('/:orderNumber', isAdmin, (req, res, next) => {
-  Order.findByPk(req.params.orderNumber)
+router.put('/:orderId', isAdmin, (req, res, next) => {
+  Order.findByPk(req.params.orderId)
     .then(order => order.update(req.body))
     .then(order => res.json(order))
     .catch(next)
