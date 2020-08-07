@@ -8,7 +8,9 @@ import {
   UserHome,
   AllProducts,
   AllOrders,
-  ConfirmationPage
+  Cart,
+  ConfirmationPage,
+  AdminUsers
 } from './components'
 import SingleProduct from './components/SingleProduct'
 import {me} from './store'
@@ -35,6 +37,7 @@ class Routes extends Component {
         <Route path="/orders" component={AllOrders} />
         <Route path="/confirmationpage" component={ConfirmationPage} />
         <Route path="/cart" component={Cart} />
+        <Route path="/admin" component={AdminUsers} />
 
         {isLoggedIn && (
           <Switch>
