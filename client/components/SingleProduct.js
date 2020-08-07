@@ -1,36 +1,38 @@
 import React from 'react'
+import {Dropdown} from 'react-bootstrap'
+import {fetchSingleProduct} from '../store/product'
+import {connect} from 'react-redux'
 
-const fakeAddToCartFunc = () => {
-  return 'welp'
-}
+// const fakeDropdownFunc = () => {
+//   return 'also welp'
+// }
 
-const fakeDropdownFunc = () => {
-  return 'also welp'
-}
-
-function SingleProduct(props) {
+const SingleProduct = props => {
   const {product, onAddToCart} = props
   // create onAddToCart function in main component (index.js?)
-
+  console.log('help')
   return (
     <div>
       <br />
-      <img src={product.imageUrl} />
+      {/* <img src={product.imageUrl} />
       <br />
       {product.name}
       <br />${product.price / 100}
       {/* not sure if on right track; in any case need to adjust for decimal places */}
       <br />
-      {product.description}
+      {/* {product.description}  */}
       <br />
-      <div className="dropdown">
-        <button type="button" onClick={() => fakeDropdownFunc()}>
-          Qty
-        </button>
-        <div id="dropdownContent">
-          {/* dropdown content (numbers 1-x?); each dropdown selection needs functionality in terms of qty added to cart */}
-        </div>
-      </div>
+      <Dropdown>
+        <Dropdown.Toggle variant="success" id="dropdown-basic">
+          Dropdown Button
+        </Dropdown.Toggle>
+
+        <Dropdown.Menu>
+          <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
+          <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
+          <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
+        </Dropdown.Menu>
+      </Dropdown>
       <br />
       <button
         type="button"
@@ -46,4 +48,16 @@ function SingleProduct(props) {
   )
 }
 
-export default SingleProduct
+const mapState = state => {
+  return {
+    product: state.product.selectedProduct
+  }
+}
+
+const mapDispatch = dispatch => {
+  return {
+    getProduct: () => dispatch(fetchSingleProduct())
+  }
+}
+
+export default connect(mapState, mapDispatch)(SingleProduct)
