@@ -1,10 +1,18 @@
 const router = require('express').Router()
-
 const {Order, User, Product} = require('../db/models')
 
 //verifying that the person has admin rights
 const isAdmin = (req, res, next) => {
   if (!req.user.isAdmin) {
+    const error = new Error('You are not authorized to perform this action')
+    error.status = 401
+    return next(error)
+  }
+  next()
+}
+
+const isSelfOrAdmin = (req, res, next) => {
+  if (req.params.id !== req.user.id || !req.user.isAdmin) {
     const error = new Error('You are not authorized to perform this action')
     error.status = 401
     return next(error)
@@ -22,6 +30,20 @@ router.get('/', isAdmin, async (req, res, next) => {
     res.json(orders)
   } catch (error) {
     next(error)
+  }
+})
+
+router.get('/cart', async (req, res, next) => {
+  try {
+    const cart = await Order.findOne({
+      where: {
+        userId: req.user.id,
+        status: 'cart'
+      }
+    })
+    res.json(cart)
+  } catch (err) {
+    next(err)
   }
 })
 
