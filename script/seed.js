@@ -35,7 +35,7 @@ async function seed() {
         'Our eco-friendliest object of destruction, a Cat will be more than adequate for your vase-smashing needs',
       imageUrl: '',
       quantity: 10,
-      price: 200.95
+      price: 20095
     }),
     Product.create({
       name: 'Catapult',
@@ -43,7 +43,7 @@ async function seed() {
         'Defend your abode medieval-style with this limited-edition weapon of vase destruction',
       imageUrl: '',
       quantity: 10,
-      price: 149.95
+      price: 14995
     }),
     Product.create({
       name: 'Slingshot',
@@ -51,7 +51,7 @@ async function seed() {
         'Craving simplicity in your vase destruction routine? You will love our vase-optimized slingshot. Whether you shoot at that dastardly vase with a pebble or load up the infernal pottery itself, you are guaranteed to be in a shard pile in no time',
       imageUrl: '',
       quantity: 10,
-      price: 24.95
+      price: 2495
     })
   ])
 
