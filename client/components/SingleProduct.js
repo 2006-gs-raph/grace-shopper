@@ -9,7 +9,8 @@ const fakeDropdownFunc = () => {
 }
 
 function SingleProduct(props) {
-  const product = props.product
+  const {product, onAddToCart} = props
+  // create onAddToCart function in main component (index.js?)
 
   return (
     <div>
@@ -17,8 +18,7 @@ function SingleProduct(props) {
       <img src={product.imageUrl} />
       <br />
       {product.name}
-      <br />
-      &dollar;{product.price / 100}
+      <br />${product.price / 100}
       {/* not sure if on right track; in any case need to adjust for decimal places */}
       <br />
       {product.description}
@@ -32,7 +32,14 @@ function SingleProduct(props) {
         </div>
       </div>
       <br />
-      <button type="button" onClick={() => fakeAddToCartFunc()}>
+      <button
+        type="button"
+        onClick={() => {
+          if (onAddToCart) {
+            onAddToCart()
+          }
+        }}
+      >
         Add to cart
       </button>
     </div>

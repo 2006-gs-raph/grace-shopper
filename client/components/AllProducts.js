@@ -18,7 +18,7 @@ function AllProducts(props) {
     getProducts()
   }, [])
 
-  const {products, getProducts} = props
+  const {products, getProducts, onAddToCart} = props
 
   return (
     <div>
@@ -38,7 +38,14 @@ function AllProducts(props) {
             <br />
             {/* code for displaying whether the product is in stock */}
             <br />
-            <button type="button" onClick={() => fakeAddToCartFunc()}>
+            <button
+              type="button"
+              onClick={() => {
+                if (onAddToCart) {
+                  onAddToCart()
+                }
+              }}
+            >
               Add to cart
             </button>
           </div>
