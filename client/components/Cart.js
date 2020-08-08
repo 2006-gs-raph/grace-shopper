@@ -8,7 +8,7 @@ const Cart = props => {
   const {list, cart, selectedOrder, getCart} = props
   useEffect(() => {
     getCart()
-  })
+  }, [])
 
   return <div>Cart Page</div>
 }

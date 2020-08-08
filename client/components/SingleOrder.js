@@ -9,7 +9,7 @@ const SingleOrder = props => {
   useEffect(() => {
     const orderId = props.match.params.orderId
     getOrder(orderId)
-  })
+  }, [])
 
   return <div>Single Order Page </div>
 }

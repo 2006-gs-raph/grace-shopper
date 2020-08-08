@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import {Dropdown} from 'react-bootstrap'
 import {fetchSingleProduct} from '../store/product'
 import {connect} from 'react-redux'
@@ -8,23 +8,23 @@ import {connect} from 'react-redux'
 // }
 
 const SingleProduct = props => {
-  const {product, onAddToCart} = props
+  const {product, onAddToCart, getProduct} = props
   useEffect(() => {
     const productId = props.match.params.productId
     getProduct(productId)
-  })
+  }, [])
   // create onAddToCart function in main component (index.js?)
   console.log('help')
   return (
     <div>
       <br />
-      {/* <img src={product.imageUrl} />
+      <img src={product.imageUrl} />
       <br />
       {product.name}
       <br />${product.price / 100}
-      {/* not sure if on right track; in any case need to adjust for decimal places */}
+      not sure if on right track; in any case need to adjust for decimal places
       <br />
-      {/* {product.description}  */}
+      {product.description}
       <br />
       <Dropdown>
         <Dropdown.Toggle variant="success" id="dropdown-basic">

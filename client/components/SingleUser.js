@@ -10,7 +10,7 @@ export const SingleUser = props => {
   useEffect(() => {
     const userId = props.match.params.userId
     getUser(userId)
-  })
+  }, [])
   return (
     <div>
       <h3>Profile for {user.email}</h3>
