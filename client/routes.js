@@ -9,7 +9,7 @@ import {
   AllProducts,
   AllOrders,
   Cart,
-  ConfirmationPage,
+  Confirmation,
   AdminUsers
 } from './components'
 import SingleProduct from './components/SingleProduct'
@@ -28,23 +28,30 @@ class Routes extends Component {
 
     return (
       <Switch>
-        {/* Routes placed here are available to all visitors */}
-        <Route path="/login" component={Login} />
-        <Route path="/signup" component={Signup} />
-
-        <Route exact path="/products" component={AllProducts} />
-        <Route path="/products/:productId" component={SingleProduct} />
-        <Route path="/orders" component={AllOrders} />
-        <Route path="/confirmationpage" component={ConfirmationPage} />
-        <Route path="/cart" component={Cart} />
-        <Route path="/admin" component={AdminUsers} />
-
         {isLoggedIn && (
           <Switch>
             {/* Routes placed here are only available after logging in */}
             <Route path="/home" component={UserHome} />
+            <Route path="/users" component={AdminUsers} />
+            <Route path="/orders/:orderId" component={SingleOrder} />
+            <Route path="/orders" component={AllOrders} />
+
+            {/* UNIVERSAL ROUTES */}
+            <Route path="/products/:productId" component={SingleProduct} />
+            <Route path="/products" component={AllProducts} />
+            <Route path="/cart" component={Cart} />
+            <Route path="/confirmation" component={Confirmation} />
           </Switch>
         )}
+        {/* Routes placed here are available to all visitors (GUESTS) */}
+        <Route path="/login" component={Login} />
+        <Route path="/signup" component={Signup} />
+
+        {/* UNIVERSAL ROUTES */}
+        <Route path="/products/:productId" component={SingleProduct} />
+        <Route path="/products" component={AllProducts} />
+        <Route path="/cart" component={Cart} />
+        <Route path="/confirmation" component={Confirmation} />
         {/* Displays our Login component as a fallback */}
         <Route component={Login} />
       </Switch>

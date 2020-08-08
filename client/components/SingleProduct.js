@@ -9,6 +9,10 @@ import {connect} from 'react-redux'
 
 const SingleProduct = props => {
   const {product, onAddToCart} = props
+  useEffect(() => {
+    const productId = props.match.params.productId
+    getProduct(productId)
+  })
   // create onAddToCart function in main component (index.js?)
   console.log('help')
   return (
@@ -56,7 +60,7 @@ const mapState = state => {
 
 const mapDispatch = dispatch => {
   return {
-    getProduct: () => dispatch(fetchSingleProduct())
+    getProduct: productId => dispatch(fetchSingleProduct(productId))
   }
 }
 
