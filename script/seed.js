@@ -11,37 +11,44 @@ async function seed() {
 
   const users = await Promise.all([
     User.create({
+      firstName: 'Admin',
       isAdmin: true,
       email: 'admin@email.com',
-      password: '123'
+      password: 'password'
     }),
     User.create({
       firstName: 'Cody',
-      lastName: 'Pug',
-      email: 'cody@email.com',
+      lastName: 'Dog',
+      email: 'cody@dog.com',
       password: '123'
     }),
     User.create({
-      firstName: 'Rigatoni',
+      firstName: 'Ziti',
       lastName: 'Cat',
-      email: 'rigatoni@email.com',
-      password: '123'
+      email: 'ziti@cat.com',
+      password: '456'
     })
   ])
 
   const products = await Promise.all([
     Product.create({
       name: 'Cat',
+      price: 100,
+      quantity: 100,
       description:
         'Our eco-friendliest object of destruction, a Cat will be more than adequate for your vase-smashing needs'
     }),
     Product.create({
       name: 'Catapult',
+      price: 200,
+      quantity: 200,
       description:
         'Defend your abode medieval-style with this limited-edition weapon of vase destruction'
     }),
     Product.create({
       name: 'Slingshot',
+      price: 300,
+      quantity: 300,
       description:
         'Craving simplicity in your vase destruction routine? You will love our vase-optimized slingshot. Whether you shoot at that dastardly vase with a pebble or load up the infernal pottery itself, you are guaranteed to be in a shard pile in no time'
     })

@@ -3,8 +3,12 @@ const db = require('../db')
 
 const Order = db.define('order', {
   status: {
-    type: Sequelize.ENUM('cart', 'cancelled', 'pending', 'shipped'),
+    type: Sequelize.ENUM('cart', 'cancelled', 'pending', 'completed'),
+    allowNull: false,
     defaultValue: 'cart'
+  },
+  orderDate: {
+    type: Sequelize.DATE
   }
 })
 
