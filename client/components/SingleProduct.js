@@ -3,10 +3,6 @@ import {Dropdown} from 'react-bootstrap'
 import {fetchSingleProduct} from '../store/product'
 import {connect} from 'react-redux'
 
-// const fakeDropdownFunc = () => {
-//   return 'also welp'
-// }
-
 const SingleProduct = props => {
   const {product, onAddToCart, getProduct} = props
   useEffect(() => {
