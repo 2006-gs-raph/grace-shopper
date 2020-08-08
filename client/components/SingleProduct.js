@@ -22,7 +22,6 @@ const SingleProduct = props => {
       <br />
       {product.name}
       <br />${product.price / 100}
-      not sure if on right track; in any case need to adjust for decimal places
       <br />
       {product.description}
       <br />
