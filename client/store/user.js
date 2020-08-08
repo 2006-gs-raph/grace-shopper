@@ -7,36 +7,11 @@ import history from '../history'
 const GET_USER = 'GET_USER'
 const REMOVE_USER = 'REMOVE_USER'
 
-// MY CODE
-
-const SET_USERS = 'SET_USERS'
-const SET_SINGLE_USER = 'SET_SINGLE_USER'
-const ADD_USER = 'ADD_USER'
-const UPDATE_USER = 'UPDATE_USER'
-const DELETE_USER = 'DELETE_USER'
-
-//_____________________________________________
-
-/**
- * INITIAL STATE
- */
-const defaultUser = {}
-
 /**
  * ACTION CREATORS
  */
 const getUser = user => ({type: GET_USER, user})
 const removeUser = () => ({type: REMOVE_USER})
-
-// MY CODE
-
-const setUsers = users => ({type: SET_USERS, users})
-const setSingleUser = user => ({type: SET_SINGLE_USER, user})
-const addUser = user => ({type: ADD_USER, user})
-const updateUser = user => ({type: UPDATE_USER, user})
-const deleteUser = userId => ({type: DELETE_USER, userId})
-
-//_____________________________________________
 
 /**
  * THUNK CREATORS
@@ -76,66 +51,10 @@ export const logout = () => async dispatch => {
   }
 }
 
-// MY CODE
-
-export const fetchUsers = () => {
-  return async function(dispatch) {
-    try {
-      const {data} = await axios.get('/api/users')
-      dispatch(setUsers(data))
-    } catch (error) {
-      console.log(error)
-    }
-  }
-}
-
-export const fetchSingleUser = userId => {
-  return async function(dispatch) {
-    try {
-      const {data} = await axios.get(`/api/users/${userId}`)
-      dispatch(setSingleUser(data))
-    } catch (error) {
-      console.log(error)
-    }
-  }
-}
-
-export const postUser = user => {
-  return async function(dispatch) {
-    try {
-      const {data} = await axios.post('/api/users', user)
-      dispatch(addUser(data))
-    } catch (error) {
-      console.log(error)
-    }
-  }
-}
-
-export const putUser = user => {
-  return async function(dispatch) {
-    try {
-      const {data} = await axios.put(`/api/users/${user.id}`, user)
-      dispatch(updateUser(data))
-    } catch (error) {
-      console.log(error)
-    }
-  }
-}
-
-export const deleteSelectedUser = userId => {
-  return async function(dispatch) {
-    try {
-      await axios.delete(`/api/users/${userId}`)
-      dispatch(fetchUsers)
-    } catch (error) {
-      console.log(error)
-    }
-  }
-}
-
-//not sure about initial state??
-
-//______________________________________________________
+/**
+ * INITIAL STATE
+ */
+const defaultUser = {}
 
 /**
  * REDUCER
@@ -146,17 +65,6 @@ export default function(state = defaultUser, action) {
       return action.user
     case REMOVE_USER:
       return defaultUser
-    case SET_USERS:
-      return action.users
-    case SET_SINGLE_USER:
-      return action.user
-    case ADD_USER:
-      return action.user
-    case UPDATE_USER:
-      //NOT SURE ABOUT THIS ONE
-      return action.user
-    case DELETE_USER:
-      return action.users
     default:
       return state
   }

@@ -7,7 +7,8 @@ import {
   Login,
   Signup,
   UserHome,
-  AdminUsers,
+  AllUsers,
+  SingleUser,
   AllOrders,
   SingleOrder,
   AllProducts,
@@ -33,7 +34,8 @@ class Routes extends Component {
           <Switch>
             {/* Routes placed here are only available after logging in */}
             <Route path="/home" component={UserHome} />
-            <Route path="/users" component={AdminUsers} />
+            <Route path="/users/:userId" component={SingleUser} />
+            <Route path="/users" component={AllUsers} />
             <Route path="/orders/:orderId" component={SingleOrder} />
             <Route path="/orders" component={AllOrders} />
 
