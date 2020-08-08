@@ -49,14 +49,14 @@ const mapState = state => {
   }
 }
 
-const mapDispatchToProps = dispatch => {
+const mapDispatch = dispatch => {
   return {
     getUser: userId => dispatch(fetchSingleUser(userId)),
     updateUser: userId => dispatch(putUser(userId))
   }
 }
 
-export default connect(mapState)(UserHome)
+export default connect(mapState, mapDispatch)(UserHome)
 
 /**
  * PROP TYPES
