@@ -33,7 +33,7 @@ const removeUser = () => ({type: REMOVE_USER})
 const setUsers = users => ({type: SET_USERS, users})
 const setSingleUser = user => ({type: SET_SINGLE_USER, user})
 const addUser = user => ({type: ADD_USER, user})
-const updatedUser = user => ({type: UPDATE_USER, user})
+const updateUser = user => ({type: UPDATE_USER, user})
 const deleteUser = userId => ({type: DELETE_USER, userId})
 
 //_____________________________________________
@@ -111,7 +111,7 @@ export const postUser = user => {
   }
 }
 
-export const updateUser = user => {
+export const putUser = user => {
   return async function(dispatch) {
     try {
       const {data} = await axios.put(`/api/users/${user.id}`, user)

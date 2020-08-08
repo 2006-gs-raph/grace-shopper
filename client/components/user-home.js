@@ -1,14 +1,17 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
-import {updateUser} from '../store'
+import {putUser, fetchSingleUser} from '../store/user'
 
 /**
  * COMPONENT
  */
 export const UserHome = props => {
   const {email, user} = props
-
+  useEffect(() => {
+    const userId = props.match.params.id
+    getUser(userId)
+  })
   return (
     <div>
       <h3>Welcome, {user.firstName}</h3>
@@ -47,7 +50,10 @@ const mapState = state => {
 }
 
 const mapDispatchToProps = dispatch => {
-  return {}
+  return {
+    getUser: userId => dispatch(fetchSingleUser(userId)),
+    updateUser: userId => dispatch(putUser(userId))
+  }
 }
 
 export default connect(mapState)(UserHome)
