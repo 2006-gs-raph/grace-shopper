@@ -23,9 +23,9 @@ export const AllProducts = props => {
   return (
     <div>
       <h1>All Products</h1>
-      <div>
+      <div className="card-deck mb-5">
         {products.map(product => (
-          <div key={product.id}>
+          <div key={product.id} className="card">
             <br />
             <Link to={`/products/${product.id}`}>
               <img src={product.imageUrl} />
@@ -39,6 +39,7 @@ export const AllProducts = props => {
             <br />
             <button
               type="button"
+              className="btn btn-outline-primary mx-2 mb-2"
               onClick={() => {
                 if (onAddToCart) {
                   onAddToCart()
