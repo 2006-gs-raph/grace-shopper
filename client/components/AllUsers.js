@@ -3,10 +3,13 @@ import {connect} from 'react-redux'
 import {fetchUsers} from '../store/userReducer'
 
 const AllUsers = props => {
-  const {users, getUsers} = props
   useEffect(() => {
     getUsers()
   }, [])
+
+  const {users, getUsers} = props
+
+  console.log(users.firstName)
 
   return (
     <div>
@@ -22,7 +25,6 @@ const AllUsers = props => {
           </thead>
           <tbody>
             <tr>
-              <th scope="row">1</th>
               <td>{user.email}</td>
               <td>{user.firstName}</td>
               <td>{user.lastName}</td>
