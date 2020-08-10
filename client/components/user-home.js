@@ -1,10 +1,15 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
+import {fetchCart} from '../store/order'
 
 //DO NOT EDIT
 export const UserHome = props => {
-  const {email} = props
+  const {email, getCart} = props
+
+  useEffect(() => {
+    getCart()
+  }, [])
 
   return (
     <div>
@@ -19,7 +24,13 @@ const mapState = state => {
   }
 }
 
-export default connect(mapState)(UserHome)
+const mapDispatch = dispatch => {
+  return {
+    getCart: () => dispatch(fetchCart())
+  }
+}
+
+export default connect(mapState, mapDispatch)(UserHome)
 
 //PropTypes
 UserHome.propTypes = {

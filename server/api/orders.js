@@ -35,13 +35,13 @@ router.get('/', isAdmin, async (req, res, next) => {
 
 router.get('/cart', async (req, res, next) => {
   try {
-    const cart = await Order.findOne({
+    const cart = await Order.findOrCreate({
       where: {
         userId: req.user.id,
         status: 'cart'
       }
     })
-    res.json(cart)
+    res.json(cart[0])
   } catch (err) {
     next(err)
   }
