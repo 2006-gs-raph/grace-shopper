@@ -1,6 +1,9 @@
 const router = require('express').Router()
 const {Order, User, Product} = require('../db/models')
 
+//extends route to cart
+router.use('/cart', require('./cart'))
+
 //verifying that the person has admin rights
 const isAdmin = (req, res, next) => {
   if (!req.user.isAdmin) {
@@ -30,20 +33,6 @@ router.get('/', isAdmin, async (req, res, next) => {
     res.json(orders)
   } catch (error) {
     next(error)
-  }
-})
-
-router.get('/cart', async (req, res, next) => {
-  try {
-    const cart = await Order.findOrCreate({
-      where: {
-        userId: req.user.id,
-        status: 'cart'
-      }
-    })
-    res.json(cart[0])
-  } catch (err) {
-    next(err)
   }
 })
 
