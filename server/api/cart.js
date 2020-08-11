@@ -5,7 +5,7 @@ module.exports = router
 //finds or creates cart (Order with cart status) for logged-in and guest users
 router.get('/', async (req, res, next) => {
   try {
-    if (req.user.id) {
+    if (req.user) {
       //Logged-in Case
       const userId = req.user.id
       const cart = await Order.findOrCreate({
@@ -17,10 +17,10 @@ router.get('/', async (req, res, next) => {
       res.json(cart[0])
     } else {
       //Guest Case
-      const userId = req.session.id
+      const userId = req.session.id //invalid input syntax for type integer
       const cart = await Order.findOrCreate({
         where: {
-          userId,
+          userId, //invalid input syntax for type integer
           status: 'cart'
         }
       })

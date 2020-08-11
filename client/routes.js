@@ -55,8 +55,8 @@ class Routes extends Component {
         <Route path="/products" component={AllProducts} />
         <Route path="/cart" component={Cart} />
         <Route path="/confirmation" component={Confirmation} />
-        {/* Displays our Login component as a fallback */}
-        <Route component={Login} />
+        {/* Displays our Products component as a fallback b/c we want people to shop */}
+        <Route component={AllProducts} />
       </Switch>
     )
   }

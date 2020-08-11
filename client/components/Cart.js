@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react'
 import axios from 'axios'
 import {Link} from 'react-router-dom'
 import {connect} from 'react-redux'
-import {fetchCart} from '../store/cart'
+import {fetchCartThunk} from '../store/cart'
 
 /**
  *
@@ -26,13 +26,13 @@ const Cart = props => {
 
 const mapState = state => {
   return {
-    list: state.order.list
+    order: state.cart.order
   }
 }
 
 const mapDispatch = dispatch => {
   return {
-    getCart: () => dispatch(fetchCart())
+    getCart: () => dispatch(fetchCartThunk())
   }
 }
 

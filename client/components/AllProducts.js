@@ -14,7 +14,7 @@ export const AllProducts = props => {
     getProducts()
   }, [])
 
-  const {products, getProducts, onAddToCart} = props
+  const {products, getProducts, getCart, onAddToCart} = props
 
   return (
     <div>
