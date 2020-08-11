@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import {fetchSingleProduct} from '../store/product'
 import {connect} from 'react-redux'
-import ProdQtyButton from './ProdQtyButton'
+//import ProdQtyButton from './ProdQtyButton'
 
 const SingleProduct = props => {
   const {product, onAddToCart, getProduct} = props
