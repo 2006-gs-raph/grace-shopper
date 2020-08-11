@@ -1,15 +1,20 @@
 import React, {useState, useEffect} from 'react'
 import {fetchSingleProduct} from '../store/product'
 import {connect} from 'react-redux'
-//import ProdQtyButton from './ProdQtyButton'
+import {addOrUpdateProductThunk, fetchCartThunk} from '../store/cart.js'
+import ProdQtyButton from './ProdQtyButton'
 
 const SingleProduct = props => {
-  const {product, onAddToCart, getProduct} = props
+  const {product, getProduct, getCart, orderId} = props
+
   useEffect(() => {
     const productId = props.match.params.productId
     getProduct(productId)
   }, [])
   // create onAddToCart function in main component (index.js?)
+  //const onAddToCart = () => addOrUpdateProductThunk()
+  let productQty = 1
+
   return (
     <div>
       <br />
@@ -21,15 +26,17 @@ const SingleProduct = props => {
       {product.description}
       <br />
       <div className="row">
-        <ProdQtyButton />
+        <ProdQtyButton
+          onUpdated={qty => {
+            productQty = qty
+          }}
+        />
         <br />
         <button
           type="button"
           className="btn btn-primary mx-2 mb-2"
           onClick={() => {
-            if (onAddToCart) {
-              onAddToCart()
-            }
+            addOrUpdateProductThunk(orderId, product.id, productQty)
           }}
         >
           Add to cart
@@ -47,7 +54,10 @@ const mapState = state => {
 
 const mapDispatch = dispatch => {
   return {
-    getProduct: productId => dispatch(fetchSingleProduct(productId))
+    getProduct: productId => dispatch(fetchSingleProduct(productId)),
+    addOrUpdateProduct: (orderId, productId, quantity) =>
+      dispatch(addOrUpdateProductThunk(orderId, productId, quantity)),
+    getCart: () => dispatch(fetchCartThunk())
   }
 }
 

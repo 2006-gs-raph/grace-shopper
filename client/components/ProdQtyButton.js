@@ -42,6 +42,7 @@ class ProdQtyButton extends React.Component {
 
   handleChange = event => {
     this.setState({quantity: event.target.value})
+    this.props.onUpdated(event.target.value)
   }
 
   render() {
