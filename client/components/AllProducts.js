@@ -10,13 +10,20 @@ export const AllProducts = props => {
   const [name, setName] = useState('');
   const [lasName, setLastName] = useState(''); */
 
+  //prop destructuring
+  const {products, getProducts, getCart, orderId, addOrUpdateProduct} = props
+  
   //useEffect Hook
   useEffect(() => {
     getProducts()
+    getCart()
   }, [])
+  
 
-  const {products, getProducts, orderId} = props
-
+  handleClick((productId) => {
+    addOrUpdateProduct(orderId, productId, 1)
+  }
+              
   return (
     <div>
       <h1>All Products</h1>
@@ -36,9 +43,9 @@ export const AllProducts = props => {
             <button
               type="button"
               className="btn btn-outline-primary mx-2 mb-2"
-              onClick={() => {
-                addOrUpdateProductThunk(orderId, product.id, 1)
-              }}
+              onClick={() => 
+                handleClick(product.id)
+              }
             >
               Add to cart
             </button>
