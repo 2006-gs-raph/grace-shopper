@@ -22,7 +22,7 @@ const Product = db.define('product', {
     defaultValue:
       'https://icon-library.com/images/bag-icon-png/bag-icon-png-21.jpg'
   },
-  quantity: {
+  inventory: {
     type: Sequelize.INTEGER,
     defaultValue: 0,
     validate: {
