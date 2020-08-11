@@ -4,10 +4,6 @@ import {Link} from 'react-router-dom'
 import {fetchProducts} from '../store/product'
 import {connect} from 'react-redux'
 
-const fakeAddToCartFunc = () => {
-  return 'welp'
-}
-
 export const AllProducts = props => {
   /*     //useState Hook below (substitute for local state)
   const [name, setName] = useState('');
@@ -28,7 +24,7 @@ export const AllProducts = props => {
           <div key={product.id} className="card">
             <br />
             <Link to={`/products/${product.id}`}>
-              <img src={product.imageUrl} />
+              <img src={product.imageUrl} className="w-100" />
               <br />
               {product.name}
             </Link>

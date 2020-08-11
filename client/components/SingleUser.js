@@ -1,36 +1,45 @@
 import React, {useState, useEffect} from 'react'
 import {connect} from 'react-redux'
 import {putUser, fetchSingleUser} from '../store/userReducer'
+import UpdateUserForm from './UpdateUserForm'
 
 /**
  * COMPONENT
  */
 export const SingleUser = props => {
-  const {user, getUser} = props
   useEffect(() => {
     const userId = props.match.params.userId
     getUser(userId)
   }, [])
-  return (
-    <div>
-      <h3>Profile for {user.email}</h3>
-      <div className="card">
-        <div className="card-header">User Information:</div>
 
-        <div className="card-body">
-          <h5 className="card-title">
-            {user.firstName} {user.lastName}
-          </h5>
-          <p className="card-text"> {user.address} </p>
-          <p className="card-text">{user.phone}</p>
-          <p className="card-text">{email}</p>
-          <button type="button" className="btn btn-primary">
-            Update
-          </button>
+  const {user, getUser} = props
+
+  return (
+    <div className="row">
+      <div className="col-sm-4">
+        <h3 className="lead">User Information </h3>{' '}
+        <div className="card">
+          <div className="card-body">
+            <p className="card-title">
+              <strong>Full Name:</strong> <span />
+              {user.firstName} {user.lastName}
+            </p>
+            <p className="card-text">
+              {' '}
+              <strong>Address:</strong> {user.address}{' '}
+            </p>
+            <p className="card-text">
+              <strong>Phone:</strong> {user.phone}
+            </p>
+            <p className="card-text">
+              <strong>Email:</strong> {user.email}
+            </p>
+            <button type="button" className="btn btn-outline-info">
+              UPDATE
+            </button>
+          </div>
         </div>
       </div>
-
-      <h2>Order History:</h2>
     </div>
   )
 }
