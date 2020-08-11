@@ -78,13 +78,41 @@ router.post('/:orderId/product/:productId', async (req, res, next) => {
 })
 
 /**
- * ROUTES TO ADD
- *
- * (post route?)
- * add product to cart route (find or create) if found update, update product qty based on difference between found qty and given qty
- *      if not found create, decrement product qty based on given qty
  *
  * (delete route)
  * remove product from cart route (destroy)
  *
  */
+
+router.delete('/:orderId/product/:productId', async (req, res, next) => {
+  try {
+    const {orderId, productId} = req.params
+
+    //find row to grab quantity (could also be passed by req.body? from state?)
+    const productToRemove = await OrderProduct.findOne({
+      where: {
+        orderId,
+        productId
+      }
+    })
+
+    //load product instance
+    const productInstance = await Product.findByPk(productId)
+
+    //increment inventory by quantity from product being removed
+    await productInstance.increment(['inventory'], {
+      by: productToRemove.quantity
+    })
+
+    //remove row from through table
+    const removalSuccess = await OrderProduct.destroy({
+      where: {
+        orderId,
+        productId
+      }
+    })
+    res.json(removalSuccess)
+  } catch (err) {
+    next(err)
+  }
+})
