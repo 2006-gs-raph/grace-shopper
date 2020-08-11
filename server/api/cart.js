@@ -40,10 +40,38 @@ router.get('/:orderId', async (req, res, next) => {
     const cartDetails = await OrderProduct.findAll({
       where: {
         orderId
-      }
-      //include: [{model: Product}], (eager loading option)
+      },
+      include: [{model: Product}]
     })
     res.json(cartDetails)
+  } catch (err) {
+    next(err)
+  }
+})
+
+router.post('/:orderId/product/:productId', async (req, res, next) => {
+  try {
+    const {orderId, productId} = req.params
+    const [orderDetails] = await OrderProduct.findOrCreate({
+      where: {
+        orderId,
+        productId
+      }
+    })
+    //load product instance
+    const productInstance = await Product.findByPk(productId)
+    const {quantity} = req.body
+
+    //decrement product inventory by given quantity
+    await productInstance.decrement(['inventory'], {by: quantity})
+
+    //increment order_products instance by quantity
+    const updatedDetails = await orderDetails.increment(['quantity'], {
+      by: quantity
+    })
+
+    //return updated instance of order details
+    res.json(updatedDetails)
   } catch (err) {
     next(err)
   }
@@ -60,38 +88,3 @@ router.get('/:orderId', async (req, res, next) => {
  * remove product from cart route (destroy)
  *
  */
-
-/**
- * OLD PUT ROUTE
- */
-
-// router.put('/', async (req, res, next) => {
-//   try {
-//     const cart = await Order.findOne({
-//       where: {
-//         userId: req.user.id,
-//         status: 'cart',
-//       },
-//     })
-//     const userId = req.user.id
-//     const orderId = cart.id
-//     const [numUpdated, updatedOrderProduct] = await OrderProduct.update(
-//       req.body,
-//       {
-//         where: {
-//           userId,
-//           orderId,
-//         },
-//         returning: true,
-//         plain: true,
-//       }
-//     )
-//     if (numUpdated) {
-//       res.json(updatedOrderProduct[0])
-//     } else {
-//       res.status(400).end()
-//     }
-//   } catch (err) {
-//     next(err)
-//   }
-// })
