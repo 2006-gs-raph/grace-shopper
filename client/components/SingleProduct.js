@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react'
-import {Dropdown} from 'react-bootstrap'
 import {fetchSingleProduct} from '../store/product'
 import {connect} from 'react-redux'
+import ProdQtyButton from './ProdQtyButton'
 
 const SingleProduct = props => {
   const {product, onAddToCart, getProduct} = props
@@ -10,39 +10,31 @@ const SingleProduct = props => {
     getProduct(productId)
   }, [])
   // create onAddToCart function in main component (index.js?)
-  console.log('help')
   return (
     <div>
       <br />
-      <img src={product.imageUrl} />
+      <img src={product.imageUrl} className="w-25" />
       <br />
       {product.name}
       <br />${product.price / 100}
       <br />
       {product.description}
       <br />
-      <Dropdown>
-        <Dropdown.Toggle variant="success" id="dropdown-basic">
-          Dropdown Button
-        </Dropdown.Toggle>
-
-        <Dropdown.Menu>
-          <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
-          <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
-          <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
-        </Dropdown.Menu>
-      </Dropdown>
-      <br />
-      <button
-        type="button"
-        onClick={() => {
-          if (onAddToCart) {
-            onAddToCart()
-          }
-        }}
-      >
-        Add to cart
-      </button>
+      <div className="row">
+        <ProdQtyButton />
+        <br />
+        <button
+          type="button"
+          className="btn btn-primary mx-2 mb-2"
+          onClick={() => {
+            if (onAddToCart) {
+              onAddToCart()
+            }
+          }}
+        >
+          Add to cart
+        </button>
+      </div>
     </div>
   )
 }
