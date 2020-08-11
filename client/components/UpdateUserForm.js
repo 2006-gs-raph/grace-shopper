@@ -2,8 +2,8 @@ import React from 'react'
 
 const UserForm = props => (
   <form id="user-form" onSubmit={props.handleSubmit}>
-    <div className="form-row">
-      <div className="form-group col-md-6">
+    <div className="card">
+      <div className="form-group col-sm-6">
         <label htmlFor="firstName">First Name:</label>
 
         <input

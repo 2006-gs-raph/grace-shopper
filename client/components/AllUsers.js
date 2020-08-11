@@ -1,53 +1,62 @@
 import React, {useState, useEffect} from 'react'
 import {connect} from 'react-redux'
-import {fetchUsers} from '../store/userReducer'
+import {fetchUsers, deleteSelectedUser} from '../store/userReducer'
+import {Link} from 'react-router-dom'
 
 const AllUsers = props => {
   useEffect(() => {
     getUsers()
   }, [])
 
-  const {users, getUsers} = props
+  const handleDelete = id => {
+    props.deleteSelectedUser(id)
+  }
 
-  console.log(users.firstName)
+  const {users, getUsers} = props
 
   return (
     <div>
-      {users.map(user => (
-        <table className="table" key={user.id}>
-          <thead className="thead-dark">
-            <tr>
-              <th scope="col">email</th>
-              <th scope="col">First Name</th>
-              <th scope="col">Last Name</th>
-              <th scope="col">Email</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>{user.email}</td>
+      <button type="button" className="btn btn-outline-success mb-3">
+        Add new user
+      </button>
+
+      <table className="table">
+        <thead className="thead-dark">
+          <tr>
+            <th scope="col">First Name</th>
+            <th scope="col">Last Name</th>
+            <th scope="col">Email</th>
+            <th scope="col">Address</th>
+            <th scope="col" />
+          </tr>
+        </thead>
+
+        <tbody>
+          {users.map(user => (
+            <tr key={user.id}>
               <td>{user.firstName}</td>
               <td>{user.lastName}</td>
+              <td>{user.email}</td>
               <td>{user.address}</td>
-              <td className="btn-group" role="group">
-                <button type="button" className="btn btn-success">
-                  Add
-                </button>
+              <td>
+                <Link to={`/users/${user.id}`}>
+                  <button type="button" className="btn btn-outline-info mr-2">
+                    View
+                  </button>
+                </Link>
+
                 <button
                   onClick={() => handleDelete(user.id)}
                   type="button"
-                  className="btn btn-danger"
+                  className="btn btn-outline-danger"
                 >
                   Delete
                 </button>
-                <button type="button" className="btn btn-info">
-                  Update
-                </button>
               </td>
             </tr>
-          </tbody>
-        </table>
-      ))}
+          ))}
+        </tbody>
+      </table>
     </div>
   )
 }
@@ -60,7 +69,8 @@ const mapState = state => {
 
 const mapDispatch = dispatch => {
   return {
-    getUsers: () => dispatch(fetchUsers())
+    getUsers: () => dispatch(fetchUsers()),
+    deleteSelectedUser: id => dispatch(deleteSelectedUser(id))
   }
 }
 
