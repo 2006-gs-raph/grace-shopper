@@ -1,52 +1,118 @@
 const router = require('express').Router()
-const {Order, OrderProduct} = require('../db/models')
+const {Order, OrderProduct, Product} = require('../db/models')
 module.exports = router
 
+//finds or creates cart (Order with cart status) for logged-in and guest users
 router.get('/', async (req, res, next) => {
   try {
-    const cart = await Order.findOrCreate({
-      where: {
-        userId: req.user.id,
-        status: 'cart'
-      }
-    })
-    res.json(cart[0])
-  } catch (err) {
-    next(err)
-  }
-})
-
-//Goal is to have the one order with status 'cart' update upon changes to redux
-//state, such as add and remove operations
-router.put('/', async (req, res, next) => {
-  try {
-    const cart = await Order.findOne({
-      where: {
-        userId: req.user.id,
-        status: 'cart'
-      }
-    })
-    const userId = req.user.id
-    const orderId = cart.id
-    const [numUpdated, updatedOrderProduct] = await OrderProduct.update(
-      req.body,
-      {
+    if (req.user.id) {
+      //Logged-in Case
+      const userId = req.user.id
+      const cart = await Order.findOrCreate({
         where: {
           userId,
-          orderId
-        },
-        returning: true,
-        plain: true
-      }
-    )
-    if (numUpdated) {
-      res.json(updatedOrderProduct[0])
+          status: 'cart'
+        }
+      })
+      res.json(cart[0])
     } else {
-      res.status(400).end()
+      //Guest Case
+      const userId = req.session.id
+      const cart = await Order.findOrCreate({
+        where: {
+          userId,
+          status: 'cart'
+        }
+      })
+      res.json(cart[0])
     }
   } catch (err) {
     next(err)
   }
 })
 
-router.put('')
+//gets information from OrderProduct through table based on orderId
+router.get('/:orderId', async (req, res, next) => {
+  try {
+    const {orderId} = req.params
+    //use orderId to findAll OrderProduct rows
+    //with the information needed to display cart details.
+    const cartDetails = await OrderProduct.findAll({
+      where: {
+        orderId
+      },
+      include: [{model: Product}]
+    })
+    res.json(cartDetails)
+  } catch (err) {
+    next(err)
+  }
+})
+
+router.post('/:orderId/product/:productId', async (req, res, next) => {
+  try {
+    const {orderId, productId} = req.params
+    const [orderDetails] = await OrderProduct.findOrCreate({
+      where: {
+        orderId,
+        productId
+      }
+    })
+    //load product instance
+    const productInstance = await Product.findByPk(productId)
+    const {quantity} = req.body
+
+    //decrement product inventory by given quantity
+    await productInstance.decrement(['inventory'], {by: quantity})
+
+    //increment order_products instance by quantity
+    const updatedDetails = await orderDetails.increment(['quantity'], {
+      by: quantity
+    })
+
+    //return updated instance of order details
+    res.json(updatedDetails)
+  } catch (err) {
+    next(err)
+  }
+})
+
+/**
+ *
+ * (delete route)
+ * remove product from cart route (destroy)
+ *
+ */
+
+router.delete('/:orderId/product/:productId', async (req, res, next) => {
+  try {
+    const {orderId, productId} = req.params
+
+    //find row to grab quantity (could also be passed by req.body? from state?)
+    const productToRemove = await OrderProduct.findOne({
+      where: {
+        orderId,
+        productId
+      }
+    })
+
+    //load product instance
+    const productInstance = await Product.findByPk(productId)
+
+    //increment inventory by quantity from product being removed
+    await productInstance.increment(['inventory'], {
+      by: productToRemove.quantity
+    })
+
+    //remove row from through table
+    const removalSuccess = await OrderProduct.destroy({
+      where: {
+        orderId,
+        productId
+      }
+    })
+    res.json(removalSuccess)
+  } catch (err) {
+    next(err)
+  }
+})

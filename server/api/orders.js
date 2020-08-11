@@ -1,9 +1,6 @@
 const router = require('express').Router()
 const {Order, User, Product} = require('../db/models')
 
-//extends route to cart
-router.use('/cart', require('./cart'))
-
 //verifying that the person has admin rights
 const isAdmin = (req, res, next) => {
   if (!req.user.isAdmin) {
