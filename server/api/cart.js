@@ -40,8 +40,11 @@ router.get('/:orderId', async (req, res, next) => {
     const cartDetails = await OrderProduct.findAll({
       where: {
         orderId
-      },
-      include: [{model: Product}]
+      }
+      //include: [{model: Product}],
+      //Eager Loading doesn't work here due to an association not existing
+      //I will need to see if I can include model Product on an order query
+      //Otherwise, another option would be to run a Promise.all using productId(s) from the return above
     })
     res.json(cartDetails)
   } catch (err) {
