@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
-import {fetchCart} from '../store/order'
+import {fetchCartThunk} from '../store/cart'
 
 //DO NOT EDIT
 export const UserHome = props => {
@@ -26,7 +26,7 @@ const mapState = state => {
 
 const mapDispatch = dispatch => {
   return {
-    getCart: () => dispatch(fetchCart())
+    getCart: () => dispatch(fetchCartThunk())
   }
 }
 
