@@ -56,7 +56,7 @@ router.post('/', isSelfOrAdmin, async (req, res, next) => {
   }
 })
 
-router.put('/:id', isSelfOrAdmin, async (req, res, next) => {
+router.put('/:id', async (req, res, next) => {
   //add a check for a user and admin
   try {
     const userToUpdate = await User.findByPk(req.params.id)

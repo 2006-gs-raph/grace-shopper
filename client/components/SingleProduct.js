@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import {fetchSingleProduct} from '../store/product'
 import {connect} from 'react-redux'
+
 import {addOrUpdateProductThunk, fetchCartThunk} from '../store/cart.js'
 import ProdQtyButton from './ProdQtyButton'
 
