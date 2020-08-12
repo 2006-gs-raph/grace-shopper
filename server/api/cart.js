@@ -81,7 +81,7 @@ router.post('/:orderId/product/:productId', async (req, res, next) => {
     //load product instance
     const productInstance = await Product.findByPk(productId)
     const {quantity} = req.body
-
+    console.log('api route for quantity', quantity)
     //decrement product inventory by given quantity
     await productInstance.decrement(['inventory'], {by: quantity})
 
