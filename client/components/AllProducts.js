@@ -19,13 +19,9 @@ export const AllProducts = props => {
     getCart()
   }, [])
 
-  //let productQty = 1
+  function handleClick(productId) {
+    addOrUpdateProduct(orderId, productId, 1)
 
-  function handleClick(productId, quantity) {
-    const func = () => {
-      addOrUpdateProduct(orderId, productId, quantity)
-    }
-    func()
   }
 
   return (
