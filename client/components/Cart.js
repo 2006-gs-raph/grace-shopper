@@ -10,17 +10,6 @@ import {
 } from '../store/cart'
 import {putOrder} from '../store/order'
 
-/**
- *
- * CART Component Needs:
- * list of items and quantities in cart
- * ability remove an item from cart
- *
- * checkout button (performs checkout operations)
- *    updates order to 'completed' status and creates new empty cart
- *    pushes confirmation page to history (navigates to confirmation page)
- */
-
 const Cart = props => {
   const {
     products,

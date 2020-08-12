@@ -40,7 +40,7 @@ async function seed() {
     Product.create({
       name: 'Catapult',
       price: 14995,
-      imageUrl: '/product-images/catapult.png',
+      imageUrl: '/product-images/catapult.jpg',
       inventory: 200,
       description:
         'Defend your abode medieval-style with this limited-edition weapon of vase destruction.'
