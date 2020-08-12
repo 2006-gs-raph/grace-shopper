@@ -12,7 +12,8 @@ router.get('/', async (req, res, next) => {
         where: {
           userId,
           status: 'cart'
-        }
+        },
+        include: [{model: Product}]
       })
       res.json(cart[0])
     } else {
