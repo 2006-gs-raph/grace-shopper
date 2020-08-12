@@ -83,7 +83,7 @@ export const addOrUpdateProductThunk = (orderId, productId, quantity) => {
   }
 }
 
-export const deleteProduct = (orderId, productId) => {
+export const removeProductFromCartThunk = (orderId, productId) => {
   return async function(dispatch) {
     try {
       await axios.delete(`/api/cart/${orderId}/product/${productId}`)

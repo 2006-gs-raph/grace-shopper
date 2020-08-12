@@ -2,7 +2,11 @@ import React, {useState, useEffect} from 'react'
 import axios from 'axios'
 import {Link} from 'react-router-dom'
 import {connect} from 'react-redux'
-import {fetchCartThunk} from '../store/cart'
+import {
+  fetchCartThunk,
+  addOrUpdateProductThunk,
+  removeProductFromCartThunk
+} from '../store/cart'
 
 /**
  *
@@ -16,23 +20,76 @@ import {fetchCartThunk} from '../store/cart'
  */
 
 const Cart = props => {
-  const {list, getCart} = props
+  const {
+    products,
+    order,
+    orderId,
+    getCart,
+    addOrUpdateProduct,
+    removeProductFromCart
+  } = props
+
   useEffect(() => {
     getCart()
   }, [])
 
-  return <div>Cart Page</div>
+  async function handleRemoveFromCart(productId) {
+    await removeProductFromCart(orderId, productId)
+    await getCart()
+  }
+
+  return (
+    <div>
+      <h1>Cart</h1>
+      <div className="card-deck mb-5">
+        {products.map(product => (
+          <div key={product.id} className="card">
+            <br />
+            <Link to={`/products/${product.id}`}>
+              <img src={product.imageUrl} className="w-100" />
+              <br />
+              {product.name}
+            </Link>
+            <br />${product.price / 100}
+            <br />
+            {/* code for displaying whether the product is in stock */}
+            <br />
+            <button
+              type="button"
+              className="btn btn-outline-primary mx-2 mb-2"
+              onClick={() => handleClick(product.id)}
+            >
+              Add to cart
+            </button>
+            <button
+              type="button"
+              className="btn btn-outline-primary mx-2 mb-2"
+              onClick={() => handleRemoveFromCart(product.id)}
+            >
+              Remove from cart
+            </button>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
 }
 
 const mapState = state => {
   return {
-    order: state.cart.order
+    orderId: state.cart.order.id,
+    order: state.cart.order,
+    products: state.cart.order.products
   }
 }
 
 const mapDispatch = dispatch => {
   return {
-    getCart: () => dispatch(fetchCartThunk())
+    getCart: () => dispatch(fetchCartThunk()),
+    addOrUpdateProduct: (orderId, productId, quantity) =>
+      dispatch(addOrUpdateProductThunk(orderId, productId, quantity)),
+    removeProductFromCart: (orderId, productId) =>
+      dispatch(removeProductFromCartThunk(orderId, productId))
   }
 }
 

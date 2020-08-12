@@ -18,6 +18,7 @@ router.get('/', async (req, res, next) => {
       res.json(cart[0])
     } else {
       //Guest Case
+      console.log(typeof req.session.id)
       const userId = req.session.id //invalid input syntax for type integer
       const cart = await Order.findOrCreate({
         where: {
