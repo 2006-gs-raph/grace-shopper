@@ -21,6 +21,7 @@ export const AllProducts = props => {
 
   function handleClick(productId) {
     addOrUpdateProduct(orderId, productId, 1)
+
   }
 
   return (

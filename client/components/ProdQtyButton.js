@@ -5,9 +5,9 @@ class ProdQtyButton extends React.Component {
     super(props)
     this.state = {
       quantity: 1,
-      show: true,
-      max: 100,
-      min: 0
+      show: true
+      // max: 100,
+      // min: 0
     }
   }
 

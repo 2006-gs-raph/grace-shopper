@@ -5,7 +5,7 @@ import {addOrUpdateProductThunk, fetchCartThunk} from '../store/cart.js'
 import ProdQtyButton from './ProdQtyButton'
 
 const SingleProduct = props => {
-  const {product, getProduct, getCart, orderId} = props
+  const {product, getProduct, getCart, orderId, addOrUpdateProduct} = props
 
   useEffect(() => {
     const productId = props.match.params.productId
@@ -13,7 +13,16 @@ const SingleProduct = props => {
   }, [])
   // create onAddToCart function in main component (index.js?)
   //const onAddToCart = () => addOrUpdateProductThunk()
+
+  //initializing product quantity at 1
   let productQty = 1
+
+  function handleClick(productId, quantity) {
+    const func = () => {
+      addOrUpdateProduct(orderId, productId, quantity)
+    }
+    func()
+  }
 
   return (
     <div>
@@ -36,7 +45,7 @@ const SingleProduct = props => {
           type="button"
           className="btn btn-primary mx-2 mb-2"
           onClick={() => {
-            addOrUpdateProductThunk(orderId, product.id, productQty)
+            handleClick(product.id)
           }}
         >
           Add to cart
@@ -48,7 +57,8 @@ const SingleProduct = props => {
 
 const mapState = state => {
   return {
-    product: state.product.selectedProduct
+    product: state.product.selectedProduct,
+    orderId: state.cart.order.id
   }
 }
 
