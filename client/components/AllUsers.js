@@ -16,10 +16,6 @@ const AllUsers = props => {
 
   return (
     <div>
-      <button type="button" className="btn btn-outline-success mb-3">
-        Add new user
-      </button>
-
       <table className="table">
         <thead className="thead-dark">
           <tr>

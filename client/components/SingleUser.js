@@ -1,63 +1,103 @@
 import React, {useState, useEffect} from 'react'
 import {connect} from 'react-redux'
 import {putUser, fetchSingleUser} from '../store/userReducer'
-import UpdateUserForm from './UpdateUserForm'
+import Axios from 'axios'
+import UserForm from './UserForm'
 
 /**
  * COMPONENT
  */
-export const SingleUser = props => {
-  useEffect(() => {
-    const userId = props.match.params.userId
-    getUser(userId)
-  }, [])
 
-  const {user, getUser} = props
+export class SingleUser extends React.Component {
+  constructor() {
+    super()
+    this.state = {
+      firstName: '',
+      lastName: '',
+      address: ''
+    }
 
-  return (
-    <div className="row">
-      <div className="col-sm-4">
-        <h3 className="lead">User Information </h3>{' '}
-        <div className="card">
-          <div className="card-body">
-            <p className="card-title">
-              <strong>Full Name:</strong> <span />
-              {user.firstName} {user.lastName}
-            </p>
-            <p className="card-text">
-              {' '}
-              <strong>Address:</strong> {user.address}{' '}
-            </p>
-            <p className="card-text">
-              <strong>Phone:</strong> {user.phone}
-            </p>
-            <p className="card-text">
-              <strong>Email:</strong> {user.email}
-            </p>
-            <button type="button" className="btn btn-outline-info">
-              UPDATE
-            </button>
+    this.handleChange = this.handleChange.bind(this)
+    this.handleSubmit = this.handleSubmit.bind(this)
+  }
+
+  componentDidMount() {
+    try {
+      const userId = this.props.match.params.userId
+      this.props.fetchSingleUser(userId)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  async handleSubmit(event) {
+    event.preventDefault()
+    const userId = this.props.user.id
+    await Axios.put(`/api/users/${userId}`, this.state)
+    this.props.fetchSingleUser(userId)
+    this.setState({
+      firstName: '',
+      lastName: '',
+      address: ''
+    })
+  }
+
+  handleChange(event) {
+    event.preventDefault()
+    this.setState({[event.target.name]: event.target.value})
+  }
+
+  render() {
+    const {user} = this.props
+
+    return (
+      <main>
+        <div className="row">
+          <div className="col-sm-6">
+            <h3 className="lead">User Information </h3>{' '}
+            <div className="card">
+              <div className="card-body">
+                <p className="card-title">
+                  <strong>First Name:</strong> <span />
+                  {user.firstName}
+                </p>
+                <p className="card-title">
+                  <strong>Last Name:</strong> <span />
+                  {user.lastName}
+                </p>
+                <p className="card-text">
+                  {' '}
+                  <strong>Address:</strong> {user.address}{' '}
+                </p>
+                <p className="card-text">
+                  <strong>Phone:</strong> {user.phone}
+                </p>
+                <p className="card-text">
+                  <strong>Email:</strong> {user.email}
+                </p>
+              </div>
+            </div>
           </div>
+          <UserForm
+            {...this.state}
+            handleChange={this.handleChange}
+            handleSubmit={this.handleSubmit}
+          />
         </div>
-      </div>
-    </div>
-  )
+      </main>
+    )
+  }
 }
 
-/**
- * CONTAINER
- */
-
-const mapState = state => {
+const mapState = reduxState => {
   return {
-    user: state.userReducer.selectedUser
+    user: reduxState.user
   }
 }
 
 const mapDispatch = dispatch => {
   return {
-    getUser: userId => dispatch(fetchSingleUser(userId)),
-    updateUser: userId => dispatch(putUser(userId))
+    fetchSingleUser: id => dispatch(fetchSingleUser(id))
   }
 }
 
