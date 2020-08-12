@@ -42,7 +42,7 @@ export const AllProducts = props => {
             <br />
             <button
               type="button"
-              className="btn btn-outline-primary mx-2 mb-2"
+              className="btn btn-default mx-2 mb-2 border-dark rounded-0"
               onClick={() => handleClick(product.id)}
             >
               Add to cart
