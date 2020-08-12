@@ -12,18 +12,17 @@ export const AllProducts = props => {
 
   //prop destructuring
   const {products, getProducts, getCart, orderId, addOrUpdateProduct} = props
-  
+
   //useEffect Hook
   useEffect(() => {
     getProducts()
     getCart()
   }, [])
-  
 
-  handleClick((productId) => {
+  function handleClick(productId) {
     addOrUpdateProduct(orderId, productId, 1)
   }
-              
+
   return (
     <div>
       <h1>All Products</h1>
@@ -43,9 +42,7 @@ export const AllProducts = props => {
             <button
               type="button"
               className="btn btn-outline-primary mx-2 mb-2"
-              onClick={() => 
-                handleClick(product.id)
-              }
+              onClick={() => handleClick(product.id)}
             >
               Add to cart
             </button>
@@ -58,7 +55,8 @@ export const AllProducts = props => {
 
 const mapState = state => {
   return {
-    products: state.product.list
+    products: state.product.list,
+    orderId: state.cart.order.id
   }
 }
 
