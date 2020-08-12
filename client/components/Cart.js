@@ -75,7 +75,7 @@ const Cart = props => {
     function pageRedirect() {
       setTimeout(function() {
         history.push('/confirmation')
-      }, 3000)
+      }, 1000)
     }
 
     pageRedirect()

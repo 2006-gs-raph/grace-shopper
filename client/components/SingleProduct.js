@@ -18,8 +18,8 @@ const SingleProduct = props => {
   // create onAddToCart function in main component (index.js?)
   //const onAddToCart = () => addOrUpdateProductThunk()
 
-  async function handleClick(productId) {
-    await addOrUpdateProduct(orderId, productId, productQty)
+  function handleClick(productId) {
+    addOrUpdateProduct(orderId, productId, productQty)
   }
 
   const IncrementItem = () => {

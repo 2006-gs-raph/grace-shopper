@@ -64,7 +64,9 @@ export const addOrUpdateProductThunk = (orderId, productId, quantity) => {
       }
       const {data} = await axios.post(
         `/api/cart/${orderId}/product/${productId}`,
-        quantity
+        {
+          quantity
+        }
       )
       dispatch(addOrUpdateProduct(productId, quantity))
     } catch (error) {
