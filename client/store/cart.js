@@ -6,23 +6,23 @@ import product from './product'
  * ACTION TYPES
  */
 const SET_CART = 'SET_CART'
-const ADD_PRODUCT_TO_CART = 'ADD_PRODUCT_TO_CART'
-const UPDATE_PRODUCT_QTY = 'UPDATE PRODUCT_QTY'
+const SET_CART_CONTENTS = 'SET_CART_CONTENTS'
+const ADD_OR_UPDATE_PRODUCT = 'ADD_OR_UPDATE_PRODUCT'
 const REMOVE_PRODUCT_FROM_CART = 'REMOVE_PRODUCT_FROM_CART'
 
 /**
  * ACTION CREATORS
  */
-const setCart = cart => ({type: SET_CART, cart})
-const addProductToCart = selectedProduct => ({
-  type: ADD_PRODUCT_TO_CART,
-  selectedProduct
-})
-const updateProductQty = (productId, qty) => ({
-  type: UPDATE_PRODUCT_QTY,
+const setCart = order => ({type: SET_CART, order})
+
+const setCartContents = products => ({type: SET_CART_CONTENTS, products})
+
+const addOrUpdateProduct = (productId, quantity) => ({
+  type: ADD_OR_UPDATE_PRODUCT,
   productId,
-  qty
+  quantity
 })
+
 const removeProductFromCart = productId => ({
   type: REMOVE_PRODUCT_FROM_CART,
   productId
@@ -32,10 +32,10 @@ const removeProductFromCart = productId => ({
  * THUNK CREATORS
  */
 
-export const fetchCart = () => {
+export const fetchCartThunk = () => {
   return async function(dispatch) {
     try {
-      const {data} = await axios.get('/api/cart')
+      const {data} = await axios.get(`/api/cart`)
       dispatch(setCart(data))
     } catch (error) {
       console.log(error)
@@ -43,32 +43,42 @@ export const fetchCart = () => {
   }
 }
 
-export const addToCart = selectedProduct => {
+export const fetchCartContentsThunk = orderId => {
   return async function(dispatch) {
     try {
-      const {data} = await axios.post('/api/cart', selectedProduct)
-      dispatch(addProductToCart(data))
+      const {data} = await axios.get(`/api/cart/${orderId}`)
+
+      //sets an array of cart contents (row from through table) on products
+      dispatch(setCartContents(data))
     } catch (error) {
       console.log(error)
     }
   }
 }
 
-export const updateProduct = (productId, qty) => {
+export const addOrUpdateProductThunk = (orderId, productId, quantity) => {
   return async function(dispatch) {
     try {
-      const {data} = await axios.put(`/api/cart/${productId}`, qty)
-      dispatch(updateProductQty(data))
+      if (!quantity) {
+        quantity = 1
+      }
+      const {data} = await axios.post(
+        `/api/cart/${orderId}/product/${productId}`,
+        {
+          quantity
+        }
+      )
+      dispatch(addOrUpdateProduct(productId, quantity))
     } catch (error) {
       console.log(error)
     }
   }
 }
 
-export const deleteProduct = productId => {
+export const removeProductFromCartThunk = (orderId, productId) => {
   return async function(dispatch) {
     try {
-      await axios.delete(`/api/cart/${productId}`)
+      await axios.delete(`/api/cart/${orderId}/product/${productId}`)
       dispatch(removeProductFromCart(productId))
     } catch (error) {
       console.log(error)
@@ -80,8 +90,9 @@ export const deleteProduct = productId => {
  * INITIAL STATE
  */
 const initialState = {
-  list: [],
-  selectedProduct: {}
+  //a list of products in the cart
+  order: {},
+  products: []
 }
 
 /**
@@ -90,13 +101,24 @@ const initialState = {
 export default function(state = initialState, action) {
   switch (action.type) {
     case SET_CART:
-      return {...state, list: action.cart}
-    case ADD_PRODUCT_TO_CART:
-      return {...state, selectedProduct: action.selectedProduct}
-    case UPDATE_PRODUCT_QTY:
-      return {...state}
+      return {...state, order: action.order}
+    case SET_CART_CONTENTS:
+      return {...state, products: action.products}
+    case ADD_OR_UPDATE_PRODUCT:
+      return {
+        ...state,
+        products: state.products.map(product => {
+          if (product.id === action.productId) product = action.product
+          return product
+        })
+      }
     case REMOVE_PRODUCT_FROM_CART:
-      return {}
+      return {
+        ...state,
+        products: state.products.filter(
+          product => product.id !== action.productId
+        )
+      }
     default:
       return state
   }

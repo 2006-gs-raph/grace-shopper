@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react'
 import axios from 'axios'
 import {Link} from 'react-router-dom'
 import {fetchProducts} from '../store/product'
+import {addOrUpdateProductThunk, fetchCartThunk} from '../store/cart.js'
 import {connect} from 'react-redux'
 
 export const AllProducts = props => {
@@ -9,12 +10,18 @@ export const AllProducts = props => {
   const [name, setName] = useState('');
   const [lasName, setLastName] = useState(''); */
 
+  //prop destructuring
+  const {products, getProducts, getCart, orderId, addOrUpdateProduct} = props
+
   //useEffect Hook
   useEffect(() => {
     getProducts()
+    getCart()
   }, [])
 
-  const {products, getProducts, onAddToCart} = props
+  function handleClick(productId) {
+    addOrUpdateProduct(orderId, productId, 1)
+  }
 
   return (
     <div>
@@ -28,19 +35,14 @@ export const AllProducts = props => {
               <br />
               {product.name}
             </Link>
-            <br />${product.price / 100}
-            {/* not sure if the above is right; also we need to update the prices elsewhere to be x100 */}
+            <br />${(product.price / 100).toFixed(2)}
             <br />
             {/* code for displaying whether the product is in stock */}
             <br />
             <button
               type="button"
-              className="btn btn-outline-primary mx-2 mb-2"
-              onClick={() => {
-                if (onAddToCart) {
-                  onAddToCart()
-                }
-              }}
+              className="btn btn-default mx-2 mb-2 border-dark rounded-0"
+              onClick={() => handleClick(product.id)}
             >
               Add to cart
             </button>
@@ -53,13 +55,17 @@ export const AllProducts = props => {
 
 const mapState = state => {
   return {
-    products: state.product.list
+    products: state.product.list,
+    orderId: state.cart.order.id
   }
 }
 
 const mapDispatch = dispatch => {
   return {
-    getProducts: () => dispatch(fetchProducts())
+    getProducts: () => dispatch(fetchProducts()),
+    addOrUpdateProduct: (orderId, productId, quantity) =>
+      dispatch(addOrUpdateProductThunk(orderId, productId, quantity)),
+    getCart: () => dispatch(fetchCartThunk())
   }
 }
 

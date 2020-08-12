@@ -5,22 +5,24 @@ module.exports = router
 //finds or creates cart (Order with cart status) for logged-in and guest users
 router.get('/', async (req, res, next) => {
   try {
-    if (req.user.id) {
+    if (req.user) {
       //Logged-in Case
       const userId = req.user.id
       const cart = await Order.findOrCreate({
         where: {
           userId,
           status: 'cart'
-        }
+        },
+        include: [{model: Product}]
       })
       res.json(cart[0])
     } else {
       //Guest Case
-      const userId = req.session.id
+      //console.log(typeof req.session.id) return sid which is a serial value?
+      const userId = req.session.id //invalid input syntax for type integer (userId)
       const cart = await Order.findOrCreate({
         where: {
-          userId,
+          userId, //invalid input syntax for type integer
           status: 'cart'
         }
       })
@@ -40,10 +42,28 @@ router.get('/:orderId', async (req, res, next) => {
     const cartDetails = await OrderProduct.findAll({
       where: {
         orderId
-      },
-      include: [{model: Product}]
+      }
     })
     res.json(cartDetails)
+  } catch (err) {
+    next(err)
+  }
+})
+
+//updates purchasePrice upon checkout
+router.put('/checkout/:orderId/product/:productId', async (req, res, next) => {
+  try {
+    const {orderId, productId} = req.params
+    const {purchasePrice} = req.body
+    await OrderProduct.update(
+      {
+        purchasePrice
+      },
+      {
+        where: {orderId, productId}
+      }
+    )
+    res.status(200).end()
   } catch (err) {
     next(err)
   }
@@ -76,13 +96,6 @@ router.post('/:orderId/product/:productId', async (req, res, next) => {
     next(err)
   }
 })
-
-/**
- *
- * (delete route)
- * remove product from cart route (destroy)
- *
- */
 
 router.delete('/:orderId/product/:productId', async (req, res, next) => {
   try {
