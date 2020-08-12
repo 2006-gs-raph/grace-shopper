@@ -51,31 +51,34 @@ const Cart = props => {
 
   async function handleCheckout(orderTotal) {
     //set purchase price on through table
-    // Promise.all(
-    //   products.map(async (product) => {
-    //     await axios.put(
-    //       `/api/cart/checkout/${orderId}/product/${product.id}`,
-    //       product.price
-    //     )
-    //   })
-    // )
+    Promise.all(
+      products.map(async product => {
+        const purchasePrice = Math.round(product.price)
+        await axios.put(`/api/cart/checkout/${orderId}/product/${product.id}`, {
+          purchasePrice
+        })
+      })
+    )
 
     //update order, status to completed, place order total
     orderTotal *= 100
-    await axios.put(`/api/orders/${orderId}`, {status: 'completed', orderTotal})
+    await axios.put(`/api/orders/${orderId}`, {
+      status: 'completed',
+      orderTotal: Math.round(orderTotal)
+    })
 
     //set new empty cart
-    //await getCart()
+    await getCart()
 
     //redirect to confirmation page component
 
-    // function pageRedirect() {
-    //   setTimeout(function () {
-    //     history.push('/confirmation')
-    //   }, 3000)
-    // }
+    function pageRedirect() {
+      setTimeout(function() {
+        history.push('/confirmation')
+      }, 3000)
+    }
 
-    // pageRedirect()
+    pageRedirect()
   }
 
   let orderTotal

@@ -53,9 +53,8 @@ router.get('/:orderId', async (req, res, next) => {
 //updates purchasePrice upon checkout
 router.put('/checkout/:orderId/product/:productId', async (req, res, next) => {
   try {
-    const purchasePrice = req.body
     const {orderId, productId} = req.params
-
+    const {purchasePrice} = req.body
     await OrderProduct.update(
       {
         purchasePrice
