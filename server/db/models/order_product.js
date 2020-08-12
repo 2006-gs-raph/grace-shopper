@@ -7,8 +7,7 @@ const OrderProduct = db.define('order_products', {
     defaultValue: 0
   },
   purchasePrice: {
-    type: Sequelize.INTEGER,
-    defaultValue: 0
+    type: Sequelize.INTEGER
   }
 })
 
