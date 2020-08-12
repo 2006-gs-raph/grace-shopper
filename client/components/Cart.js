@@ -30,7 +30,11 @@ const Cart = props => {
   } = props
 
   useEffect(() => {
-    getCart()
+    async function callGetCart() {
+      await getCart()
+    }
+
+    callGetCart()
   }, [])
 
   async function handleRemoveFromCart(productId) {
@@ -38,38 +42,68 @@ const Cart = props => {
     await getCart()
   }
 
-  return (
+  async function handleIncreaseQuantity(productId) {
+    await addOrUpdateProduct(orderId, productId, 1)
+    await getCart()
+  }
+
+  async function handleCheckout() {}
+
+  //card-deck mb-5
+
+  return !products ? (
+    <div>Loading</div>
+  ) : (
     <div>
       <h1>Cart</h1>
-      <div className="card-deck mb-5">
-        {products.map(product => (
-          <div key={product.id} className="card">
-            <br />
-            <Link to={`/products/${product.id}`}>
-              <img src={product.imageUrl} className="w-100" />
+      <div className="card">
+        <ul className="list-group list-group-flush">
+          {products.map(product => (
+            <li key={product.id} className="list-group-item">
               <br />
-              {product.name}
-            </Link>
-            <br />${product.price / 100}
-            <br />
-            {/* code for displaying whether the product is in stock */}
-            <br />
+              <Link to={`/products/${product.id}`}>
+                <img src={product.imageUrl} className="w-25" />
+                <br />
+                {product.name}
+              </Link>
+              <br />
+              {`Price $${product.price / 100}`}
+              <br />
+              {`Quantity ${product.order_products.quantity}`}
+              <br />
+              {`Subtotal $${(
+                product.price *
+                product.order_products.quantity /
+                100
+              ).toFixed(2)}`}
+              {/* code for displaying whether the product is in stock */}
+              <br />
+              <button
+                type="button"
+                className="btn btn-outline-primary mx-2 mb-2"
+                onClick={() => handleIncreaseQuantity(product.id)}
+              >
+                Increase quantity
+              </button>
+              <button
+                type="button"
+                className="btn btn-outline-primary mx-2 mb-2"
+                onClick={() => handleRemoveFromCart(product.id)}
+              >
+                Remove from cart
+              </button>
+            </li>
+          ))}
+          <li className="list-group-item">
             <button
               type="button"
               className="btn btn-outline-primary mx-2 mb-2"
-              onClick={() => handleClick(product.id)}
+              onClick={() => handleCheckout()}
             >
-              Add to cart
+              Checkout
             </button>
-            <button
-              type="button"
-              className="btn btn-outline-primary mx-2 mb-2"
-              onClick={() => handleRemoveFromCart(product.id)}
-            >
-              Remove from cart
-            </button>
-          </div>
-        ))}
+          </li>
+        </ul>
       </div>
     </div>
   )

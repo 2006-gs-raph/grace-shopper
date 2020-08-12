@@ -21,7 +21,6 @@ export const AllProducts = props => {
 
   function handleClick(productId) {
     addOrUpdateProduct(orderId, productId, 1)
-
   }
 
   return (
@@ -36,7 +35,7 @@ export const AllProducts = props => {
               <br />
               {product.name}
             </Link>
-            <br />${product.price / 100}
+            <br />${(product.price / 100).toFixed(2)}
             <br />
             {/* code for displaying whether the product is in stock */}
             <br />

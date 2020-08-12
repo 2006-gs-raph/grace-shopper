@@ -55,16 +55,6 @@ export const fetchCartContentsThunk = orderId => {
     }
   }
 }
-// export const addToCart = (selectedProduct) => {
-//   return async function (dispatch) {
-//     try {
-//       const {data} = await axios.post('/api/cart', selectedProduct)
-//       dispatch(addProductToCart(data))
-//     } catch (error) {
-//       console.log(error)
-//     }
-//   }
-// }
 
 export const addOrUpdateProductThunk = (orderId, productId, quantity) => {
   return async function(dispatch) {
