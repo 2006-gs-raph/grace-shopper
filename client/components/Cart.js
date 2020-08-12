@@ -61,7 +61,8 @@ const Cart = props => {
     // )
 
     //update order, status to completed, place order total
-    await updateOrderStatus(orderId, {status: 'completed', orderTotal})
+    orderTotal *= 100
+    await axios.put(`/api/orders/${orderId}`, {status: 'completed', orderTotal})
 
     //set new empty cart
     //await getCart()
