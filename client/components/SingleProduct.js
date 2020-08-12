@@ -7,21 +7,43 @@ import ProdQtyButton from './ProdQtyButton'
 const SingleProduct = props => {
   const {product, getProduct, getCart, orderId, addOrUpdateProduct} = props
 
+  const [productQty, setProductQty] = useState(1)
+  const [show, setShow] = useState(true)
+
   useEffect(() => {
     const productId = props.match.params.productId
     getProduct(productId)
+    getCart()
   }, [])
   // create onAddToCart function in main component (index.js?)
   //const onAddToCart = () => addOrUpdateProductThunk()
 
-  //initializing product quantity at 1
-  let productQty = 1
+  function handleClick(productId) {
+    addOrUpdateProduct(orderId, productId, productQty)
+  }
 
-  function handleClick(productId, quantity) {
-    const func = () => {
-      addOrUpdateProduct(orderId, productId, quantity)
+  const IncrementItem = () => {
+    if (productQty < 9) {
+      setProductQty(productQty + 1)
+    } else {
+      return null
     }
-    func()
+  }
+
+  const DecreaseItem = () => {
+    if (productQty > 1) {
+      setProductQty(productQty - 1)
+    } else {
+      return null
+    }
+  }
+
+  const ToggleClick = () => {
+    setShow(!show)
+  }
+
+  const handleChange = event => {
+    setProductQty(event.target.value)
   }
 
   return (
@@ -34,12 +56,29 @@ const SingleProduct = props => {
       <br />
       {product.description}
       <br />
+      {/* <ProdQtyButton/> */}
       <div className="row">
-        <ProdQtyButton
-          onUpdated={qty => {
-            productQty = qty
-          }}
-        />
+        <div className="border border-dark ">
+          <button
+            type="button"
+            className="btn btn-default mx-2 mb-2 "
+            onClick={DecreaseItem}
+          >
+            -
+          </button>
+          <input
+            className="border-0 w-10 col-xs-2"
+            value={productQty}
+            onChange={handleChange}
+          />
+          <button
+            type="button"
+            className="btn btn-default mx-2 mb-2 "
+            onClick={IncrementItem}
+          >
+            +
+          </button>
+        </div>
         <br />
         <button
           type="button"

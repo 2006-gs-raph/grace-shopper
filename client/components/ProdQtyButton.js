@@ -6,8 +6,6 @@ class ProdQtyButton extends React.Component {
     this.state = {
       quantity: 1,
       show: true
-      // max: 100,
-      // min: 0
     }
   }
 
@@ -42,7 +40,7 @@ class ProdQtyButton extends React.Component {
 
   handleChange = event => {
     this.setState({quantity: event.target.value})
-    this.props.onUpdated(event.target.value)
+    this.props.setProductQty(event.target.value)
   }
 
   render() {

@@ -55,16 +55,6 @@ export const fetchCartContentsThunk = orderId => {
     }
   }
 }
-// export const addToCart = (selectedProduct) => {
-//   return async function (dispatch) {
-//     try {
-//       const {data} = await axios.post('/api/cart', selectedProduct)
-//       dispatch(addProductToCart(data))
-//     } catch (error) {
-//       console.log(error)
-//     }
-//   }
-// }
 
 export const addOrUpdateProductThunk = (orderId, productId, quantity) => {
   return async function(dispatch) {
@@ -74,7 +64,9 @@ export const addOrUpdateProductThunk = (orderId, productId, quantity) => {
       }
       const {data} = await axios.post(
         `/api/cart/${orderId}/product/${productId}`,
-        quantity
+        {
+          quantity
+        }
       )
       dispatch(addOrUpdateProduct(productId, quantity))
     } catch (error) {
@@ -83,7 +75,7 @@ export const addOrUpdateProductThunk = (orderId, productId, quantity) => {
   }
 }
 
-export const deleteProduct = (orderId, productId) => {
+export const removeProductFromCartThunk = (orderId, productId) => {
   return async function(dispatch) {
     try {
       await axios.delete(`/api/cart/${orderId}/product/${productId}`)

@@ -40,7 +40,7 @@ async function seed() {
     Product.create({
       name: 'Catapult',
       price: 14995,
-      imageUrl: '/product-images/catapult.png',
+      imageUrl: '/product-images/catapult.jpg',
       inventory: 200,
       description:
         'Defend your abode medieval-style with this limited-edition weapon of vase destruction.'
@@ -73,19 +73,16 @@ async function seed() {
   const orderProducts = await Promise.all([
     OrderProduct.create({
       quantity: 1,
-      purchasePrice: 100,
       productId: 1,
       orderId: 1
     }),
     OrderProduct.create({
       quantity: 1,
-      purchasePrice: 200,
       productId: 2,
       orderId: 2
     }),
     OrderProduct.create({
       quantity: 1,
-      purchasePrice: 300,
       productId: 3,
       orderId: 3
     })

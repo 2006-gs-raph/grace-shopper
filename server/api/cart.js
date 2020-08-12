@@ -12,12 +12,14 @@ router.get('/', async (req, res, next) => {
         where: {
           userId,
           status: 'cart'
-        }
+        },
+        include: [{model: Product}]
       })
       res.json(cart[0])
     } else {
       //Guest Case
-      const userId = req.session.id //invalid input syntax for type integer
+      //console.log(typeof req.session.id) return sid which is a serial value?
+      const userId = req.session.id //invalid input syntax for type integer (userId)
       const cart = await Order.findOrCreate({
         where: {
           userId, //invalid input syntax for type integer
@@ -41,12 +43,27 @@ router.get('/:orderId', async (req, res, next) => {
       where: {
         orderId
       }
-      //include: [{model: Product}],
-      //Eager Loading doesn't work here due to an association not existing
-      //I will need to see if I can include model Product on an order query
-      //Otherwise, another option would be to run a Promise.all using productId(s) from the return above
     })
     res.json(cartDetails)
+  } catch (err) {
+    next(err)
+  }
+})
+
+//updates purchasePrice upon checkout
+router.put('/checkout/:orderId/product/:productId', async (req, res, next) => {
+  try {
+    const {orderId, productId} = req.params
+    const {purchasePrice} = req.body
+    await OrderProduct.update(
+      {
+        purchasePrice
+      },
+      {
+        where: {orderId, productId}
+      }
+    )
+    res.status(200).end()
   } catch (err) {
     next(err)
   }
@@ -79,13 +96,6 @@ router.post('/:orderId/product/:productId', async (req, res, next) => {
     next(err)
   }
 })
-
-/**
- *
- * (delete route)
- * remove product from cart route (destroy)
- *
- */
 
 router.delete('/:orderId/product/:productId', async (req, res, next) => {
   try {

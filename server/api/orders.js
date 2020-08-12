@@ -64,11 +64,25 @@ router.delete('/:orderId', isAdmin, (req, res, next) => {
 })
 
 //update an order
-router.put('/:orderId', isAdmin, (req, res, next) => {
-  Order.findByPk(req.params.orderId)
-    .then(order => order.update(req.body))
-    .then(order => res.json(order))
-    .catch(next)
+router.put('/:orderId', async (req, res, next) => {
+  try {
+    const id = req.params.orderId
+    const orderToUpdate = await Order.findByPk(id)
+    await orderToUpdate.update(req.body)
+    res.status(200).end()
+    // const [numUpdated, updatedOrder] = await Order.update(req.body, {
+    //   where: {id},
+    //   returning: true,
+    //   plain: true,
+    // })
+    // if (numUpdated) {
+    //   res.json(updatedOrder[0])
+    // } else {
+    //   res.status(400).end()
+    // }
+  } catch (err) {
+    next(err)
+  }
 })
 
 module.exports = router
