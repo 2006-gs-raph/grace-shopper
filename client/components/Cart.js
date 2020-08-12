@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import axios from 'axios'
+import history from '../history'
 import {Link} from 'react-router-dom'
 import {connect} from 'react-redux'
 import {
@@ -46,7 +46,13 @@ const Cart = props => {
     await getCart()
   }
 
-  async function handleCheckout() {}
+  async function handleCheckout(orderTotal) {
+    //update order, status to completed, place order total
+
+    //set purchase price on through table
+    //set new empty cart
+    history.push('/confirmation')
+  }
 
   let orderTotal
   return !products ? (
@@ -101,7 +107,7 @@ const Cart = props => {
             <button
               type="button"
               className="btn btn-outline-primary mx-2 mb-2"
-              onClick={() => handleCheckout()}
+              onClick={orderTotal => handleCheckout(orderTotal)}
             >
               Checkout
             </button>
