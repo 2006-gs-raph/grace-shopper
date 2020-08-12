@@ -47,22 +47,22 @@ class ProdQtyButton extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className="border border-dark ">
         <button
           type="button"
-          className="btn btn-primary mx-2 mb-2"
+          className="btn btn-default mx-2 mb-2 "
           onClick={this.DecreaseItem}
         >
           -
         </button>
         <input
-          // className="btn"
+          className="border-0 w-10 col-xs-2"
           value={this.state.quantity}
           onChange={this.handleChange}
         />
         <button
           type="button"
-          className="btn btn-primary mx-2 mb-2"
+          className="btn btn-default mx-2 mb-2 "
           onClick={this.IncrementItem}
         >
           +
