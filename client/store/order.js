@@ -71,10 +71,10 @@ export const postOrder = order => {
   }
 }
 
-export const putOrder = order => {
+export const putOrder = (orderId, order) => {
   return async dispatch => {
     try {
-      const response = await axios.put(`/api/orders/${order.id}`, order)
+      const response = await axios.put(`/api/orders/${orderId}`, order)
       dispatch(updateOrder(response.data))
     } catch (err) {
       console.error(err.message)

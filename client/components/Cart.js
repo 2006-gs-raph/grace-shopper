@@ -1,12 +1,14 @@
 import React, {useState, useEffect} from 'react'
 import history from '../history'
 import {Link} from 'react-router-dom'
+import axios from 'axios'
 import {connect} from 'react-redux'
 import {
   fetchCartThunk,
   addOrUpdateProductThunk,
   removeProductFromCartThunk
 } from '../store/cart'
+import {putOrder} from '../store/order'
 
 /**
  *
@@ -26,7 +28,8 @@ const Cart = props => {
     orderId,
     getCart,
     addOrUpdateProduct,
-    removeProductFromCart
+    removeProductFromCart,
+    updateOrderStatus
   } = props
 
   useEffect(() => {
@@ -47,11 +50,31 @@ const Cart = props => {
   }
 
   async function handleCheckout(orderTotal) {
-    //update order, status to completed, place order total
-
     //set purchase price on through table
+    // Promise.all(
+    //   products.map(async (product) => {
+    //     await axios.put(
+    //       `/api/cart/checkout/${orderId}/product/${product.id}`,
+    //       product.price
+    //     )
+    //   })
+    // )
+
+    //update order, status to completed, place order total
+    await updateOrderStatus(orderId, {status: 'completed', orderTotal})
+
     //set new empty cart
-    history.push('/confirmation')
+    //await getCart()
+
+    //redirect to confirmation page component
+
+    // function pageRedirect() {
+    //   setTimeout(function () {
+    //     history.push('/confirmation')
+    //   }, 3000)
+    // }
+
+    // pageRedirect()
   }
 
   let orderTotal
@@ -107,7 +130,7 @@ const Cart = props => {
             <button
               type="button"
               className="btn btn-outline-primary mx-2 mb-2"
-              onClick={orderTotal => handleCheckout(orderTotal)}
+              onClick={() => handleCheckout(orderTotal)}
             >
               Checkout
             </button>
@@ -129,6 +152,7 @@ const mapState = state => {
 const mapDispatch = dispatch => {
   return {
     getCart: () => dispatch(fetchCartThunk()),
+    updateOrderStatus: (orderId, order) => dispatch(putOrder(orderId, order)),
     addOrUpdateProduct: (orderId, productId, quantity) =>
       dispatch(addOrUpdateProductThunk(orderId, productId, quantity)),
     removeProductFromCart: (orderId, productId) =>
