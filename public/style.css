@@ -19,8 +19,3 @@ form div {
   margin: 1em;
   display: inline-block;
 }
-
-#cart {
-  display: flex;
-  flex-direction: row;
-}

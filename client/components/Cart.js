@@ -33,7 +33,6 @@ const Cart = props => {
     async function callGetCart() {
       await getCart()
     }
-
     callGetCart()
   }, [])
 
@@ -49,8 +48,7 @@ const Cart = props => {
 
   async function handleCheckout() {}
 
-  //card-deck mb-5
-
+  let orderTotal
   return !products ? (
     <div>Loading</div>
   ) : (
@@ -95,6 +93,11 @@ const Cart = props => {
             </li>
           ))}
           <li className="list-group-item">
+            {`Order Total $${(orderTotal =
+              order.products.reduce((accum, currVal) => {
+                return (accum +=
+                  currVal.price * currVal.order_products.quantity)
+              }, 0) / 100).toFixed(2)}`}
             <button
               type="button"
               className="btn btn-outline-primary mx-2 mb-2"
